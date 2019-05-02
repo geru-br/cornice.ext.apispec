@@ -2,8 +2,8 @@ import unittest
 
 import colander
 
-from cornice_swagger.swagger import DefinitionHandler
-from cornice_swagger.converters import convert_schema as convert
+from cornice_apispec.swagger import DefinitionHandler
+from cornice_apispec.converters import convert_schema as convert
 
 
 class MyListSchema(colander.SequenceSchema):

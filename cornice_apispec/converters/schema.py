@@ -3,9 +3,8 @@ This module handles the conversion between colander object schemas and swagger
 object schemas by converting types and node validators.
 """
 
-import colander
 
-from cornice_swagger.converters.exceptions import NoSuchConverter
+from cornice_apispec.converters.exceptions import NoSuchConverter
 
 
 def convert_length_validator_factory(max_key, min_key):
@@ -242,15 +241,15 @@ class TypeConversionDispatcher(object):
     def __init__(self, custom_converters={}, default_converter=None):
 
         self.converters = {
-            colander.Boolean: BooleanTypeConverter,
-            colander.Date: DateTypeConverter,
-            colander.DateTime: DateTimeTypeConverter,
-            colander.Float: NumberTypeConverter,
-            colander.Integer: IntegerTypeConverter,
-            colander.Mapping: ObjectTypeConverter,
-            colander.Sequence: ArrayTypeConverter,
-            colander.String: StringTypeConverter,
-            colander.Time: TimeTypeConverter,
+            # colander.Boolean: BooleanTypeConverter,
+            # colander.Date: DateTypeConverter,
+            # colander.DateTime: DateTimeTypeConverter,
+            # colander.Float: NumberTypeConverter,
+            # colander.Integer: IntegerTypeConverter,
+            # colander.Mapping: ObjectTypeConverter,
+            # colander.Sequence: ArrayTypeConverter,
+            # colander.String: StringTypeConverter,
+            # colander.Time: TimeTypeConverter,
         }
 
         self.converters.update(custom_converters)

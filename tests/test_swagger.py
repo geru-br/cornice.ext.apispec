@@ -5,7 +5,7 @@ from cornice.validators import colander_validator, colander_body_validator
 from cornice.service import Service
 from flex.core import validate
 
-from cornice_swagger.swagger import CorniceSwagger, CorniceSwaggerException
+from cornice_apispec.swagger import CorniceSwagger, CorniceSwaggerException
 
 from .support import (GetRequestSchema, PutRequestSchema, response_schemas,
                       BodySchema, HeaderSchema)
@@ -107,7 +107,7 @@ class CorniceSwaggerGeneratorTest(unittest.TestCase):
         expected = {'name': 'BodySchema', 'required': False}
         self.assertDictContainsSubset(expected, spec['parameters']['BodySchema'])
 
-    @mock.patch('cornice_swagger.swagger.warnings.warn')
+    @mock.patch('cornice_apispec.swagger.warnings.warn')
     def test_swagger_call_is_deprecated(self, mocked):
         self.swagger()
         msg = "Calling `CorniceSwagger is deprecated, call `generate` instead"

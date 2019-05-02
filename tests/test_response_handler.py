@@ -1,8 +1,8 @@
 import unittest
 import colander
 
-from cornice_swagger.swagger import ResponseHandler, CorniceSwaggerException
-from cornice_swagger.converters import convert_schema
+from cornice_apispec.swagger import ResponseHandler, CorniceSwaggerException
+from cornice_apispec.converters import convert_schema
 from .support import (BodySchema, HeaderSchema, ResponseSchema, response_schemas,
                       DeclarativeSchema, AnotherDeclarativeSchema)
 

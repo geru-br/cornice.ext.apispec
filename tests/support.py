@@ -1,6 +1,6 @@
 import colander
 
-from cornice_swagger.converters.schema import TypeConverter
+from cornice_apispec.converters.schema import TypeConverter
 
 
 class MyNestedSchema(colander.MappingSchema):

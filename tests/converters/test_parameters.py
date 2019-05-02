@@ -2,8 +2,8 @@ import unittest
 
 import colander
 
-from cornice_swagger.converters import convert_parameter, convert_schema
-from cornice_swagger.converters.exceptions import NoSuchConverter
+from cornice_apispec.converters import convert_parameter, convert_schema
+from cornice_apispec.converters.exceptions import NoSuchConverter
 
 
 class ParameterConversionTest(unittest.TestCase):

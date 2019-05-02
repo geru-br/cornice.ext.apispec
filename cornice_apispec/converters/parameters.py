@@ -1,6 +1,6 @@
 """Converts from colander request chema to Swagger parameters."""
 
-from cornice_swagger.converters.exceptions import NoSuchConverter
+from cornice_apispec.converters.exceptions import NoSuchConverter
 
 
 class ParameterConverter(object):

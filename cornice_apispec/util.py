@@ -1,4 +1,4 @@
-import colander
+
 import six
 from cornice.validators import colander_body_validator
 

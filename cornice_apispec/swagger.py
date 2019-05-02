@@ -3,15 +3,45 @@ import inspect
 import warnings
 from collections import OrderedDict
 
+from apispec import APISpec, BasePlugin
+from apispec.ext.marshmallow import MarshmallowPlugin
 
-import colander
+from cornice.service import get_services
 from cornice.util import to_list
 from pyramid.threadlocal import get_current_registry
 import six
 
-from cornice_swagger.util import body_schema_transformer, merge_dicts, trim
-from cornice_swagger.converters import (TypeConversionDispatcher as TypeConverter,
+from cornice_apispec.util import body_schema_transformer, merge_dicts, trim
+from cornice_apispec.converters import (TypeConversionDispatcher as TypeConverter,
                                         ParameterConversionDispatcher as ParameterConverter)
+
+
+
+class CornicePlugin(BasePlugin):
+
+    ignore_methods = ['HEAD', 'OPTIONS']
+
+    def path_helper(self, operations, service, **kwargs):
+        """Path helper that parses docstrings for operations. Adds a
+        ``func`` parameter to `apispec.APISpec.path`.
+        """
+
+        for method, view, args in service.definitions:
+
+            if method.lower() in map(str.lower, self.ignore_methods):
+                continue
+
+            schema = args.get('schema', None)
+            if schema:
+                # spec.components.schema(schema.__name__, schema=schema)
+                # spec.components.parameter(schema.__name__, location='1')
+
+                operations.update({method.lower():
+                                       {'description': 'Get a random pet',
+                                        'responses': {200: {'content': 'application/json',
+                                                             'schema': 'PetSchema'}}}})
+
+        return service.path
 
 
 class CorniceSwaggerException(Exception):
@@ -282,37 +312,37 @@ class CorniceSwagger(object):
     `cornice.service.get_services()` to get it."""
 
     definitions = DefinitionHandler
-    """Default :class:`cornice_swagger.swagger.DefinitionHandler` class to use when
+    """Default :class:`cornice_apispec.swagger.DefinitionHandler` class to use when
     handling OpenAPI schema definitions from cornice payload schemas."""
 
     parameters = ParameterHandler
-    """Default :class:`cornice_swagger.swagger.ParameterHandler` class to use when
+    """Default :class:`cornice_apispec.swagger.ParameterHandler` class to use when
     handling OpenAPI operation parameters from cornice request schemas."""
 
     responses = ResponseHandler
-    """Default :class:`cornice_swagger.swagger.ResponseHandler` class to use when
-    handling OpenAPI responses from cornice_swagger defined responses."""
+    """Default :class:`cornice_apispec.swagger.ResponseHandler` class to use when
+    handling OpenAPI responses from cornice_apispec defined responses."""
 
     schema_transformers = [body_schema_transformer]
     """List of request schema transformers that should be applied to a request
     schema to make it comply with a cornice default request schema."""
 
     type_converter = TypeConverter
-    """Default :class:`cornice_swagger.converters.schema.TypeConversionDispatcher`
+    """Default :class:`cornice_apispec.converters.schema.TypeConversionDispatcher`
     class used for converting colander schema Types to Swagger Types."""
 
     parameter_converter = ParameterConverter
-    """Default :class:`cornice_swagger.converters.parameters.ParameterConversionDispatcher`
+    """Default :class:`cornice_apispec.converters.parameters.ParameterConversionDispatcher`
     class used for converting colander/cornice request schemas to Swagger Parameters."""
 
     custom_type_converters = {}
     """Mapping for supporting custom types conversion on the default TypeConverter.
-    Should map `colander.TypeSchema` to `cornice_swagger.converters.schema.TypeConverter`
+    Should map `colander.TypeSchema` to `cornice_apispec.converters.schema.TypeConverter`
     callables."""
 
     default_type_converter = None
     """Supplies a default type converter matching the interface of
-    `cornice_swagger.converters.schema.TypeConverter` to be used with unknown types."""
+    `cornice_apispec.converters.schema.TypeConverter` to be used with unknown types."""
 
     default_tags = None
     """Provide a default list of tags or a callable that takes a cornice
@@ -414,11 +444,27 @@ class CorniceSwagger(object):
         :rtype: dict
         :returns: Full OpenAPI/Swagger compliant specification for the application.
         """
+
         title = title or self.api_title
         version = version or self.api_version
         info = info or self.swagger.get('info', {})
         swagger = swagger or self.swagger
         base_path = base_path or self.base_path
+
+        spec = APISpec(
+            title=title,
+            version=version,
+            openapi_version="3.0.2",
+            info=info,
+            plugins=[MarshmallowPlugin(), CornicePlugin()],
+        )
+
+        for service in get_services():
+            spec.path(service=service)
+
+
+        return spec.to_dict()
+
 
         swagger = swagger.copy()
         info.update(title=title, version=version)
@@ -679,10 +725,7 @@ class CorniceSwagger(object):
         return op
 
     def _is_colander_schema(self, args):
-        schema = args.get('schema')
-        return (isinstance(schema, colander.Schema) or
-                (inspect.isclass(schema)
-                and issubclass(schema, colander.MappingSchema)))
+        return False
 
     def _extract_transform_colander_schema(self, args):
         """

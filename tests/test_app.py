@@ -8,7 +8,7 @@ from cornice.validators import colander_validator
 from flex.core import validate
 
 from .support import GetRequestSchema, PutRequestSchema, response_schemas
-from cornice_swagger import CorniceSwagger
+from cornice_apispec import CorniceSwagger
 
 
 class AppTest(unittest.TestCase):
@@ -41,7 +41,7 @@ class AppTest(unittest.TestCase):
 
         self.config = testing.setUp()
         self.config.include('cornice')
-        self.config.include('cornice_swagger')
+        self.config.include('cornice_apispec')
         self.config.add_cornice_service(service)
         self.config.add_cornice_service(api_service)
         self.app = webtest.TestApp(self.config.make_wsgi_app())
@@ -77,7 +77,7 @@ class AppSpecViewTest(unittest.TestCase):
 
         self.config = testing.setUp()
         self.config.include('cornice')
-        self.config.include('cornice_swagger')
+        self.config.include('cornice_apispec')
         self.config.cornice_enable_openapi_view(
             title='IceCreamAPI',
             description="OpenAPI documentation",
@@ -109,7 +109,7 @@ class AppUIViewTest(unittest.TestCase):
 
         self.config = testing.setUp()
         self.config.include('cornice')
-        self.config.include('cornice_swagger')
+        self.config.include('cornice_apispec')
         self.config.cornice_enable_openapi_view(
             title='IceCreamAPI',
             description="OpenAPI documentation",
@@ -144,7 +144,7 @@ class AppGoodRoutesTest(unittest.TestCase):
         self.config = testing.setUp()
         self.config.add_route('ice_test', '/ice_test/{flavour}')
         self.config.include('cornice')
-        self.config.include('cornice_swagger')
+        self.config.include('cornice_apispec')
         self.config.add_cornice_service(service)
         self.services = [service]
         self.app = webtest.TestApp(self.config.make_wsgi_app())
@@ -171,7 +171,7 @@ class AppBadRoutesTest(unittest.TestCase):
         service = Service('Ice Route', pyramid_route='ice_testXXX')
         self.config = testing.setUp()
         self.config.include('cornice')
-        self.config.include('cornice_swagger')
+        self.config.include('cornice_apispec')
         self.config.add_cornice_service(service)
         self.services = [service]
         self.app = webtest.TestApp(self.config.make_wsgi_app())
