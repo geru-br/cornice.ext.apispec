@@ -21,6 +21,15 @@ class CornicePlugin(BasePlugin):
 
         for method, view, args in service.definitions:
 
+            tags = []
+
+            if hasattr(service, 'tags') and isinstance(service.tags, list):
+                for tag in service.tags:
+                    if isinstance(tag, dict):
+                        tags.extend(tag.keys())
+                    else:
+                        tags.append(tag)
+
             if method.lower() in map(str.lower, self.ignore_methods):
                 continue
 
@@ -28,13 +37,15 @@ class CornicePlugin(BasePlugin):
             if schema:
 
                 operations.update({method.lower():
-                                       {'description': 'Get a random pet',
+                                       {'description': service.description,
+                                        'tags': tags,
                                         'requestBody': {'content': {'application/json': {'schema': schema.__name__}}},
                                         'responses': {200: {'content': {'application/json':
                                                                             {'schema': schema.__name__}}}}}})
             else:
                 operations.update({method.lower():
-                                       {'description': 'Get a random pet',
+                                       {'description': service.description,
+                                        'tags': tags,
                                         'parameters': {'uuid': 'uuid'},
                                         'responses': {200: {'content': {'application/json': 'lala'}}}}})
 
@@ -207,6 +218,13 @@ class CorniceSwagger(object):
                         spec.components.parameter(parameter, 'path', service=service)
                     except DuplicateComponentNameError:
                         pass
+            if hasattr(service, 'tags'):
+                for tag in service.tags:
+                    if isinstance(tag, dict):
+                        for key, value in tag.items():
+                            spec.tag({'name': key, 'description': value})
+                    else:
+                        spec.tag({'name': tag, 'description': service.description})
 
         for service in get_services():
             spec.path(service=service)

@@ -23,24 +23,23 @@ class SaleSchema(Schema):
     quantity = fields.Decimal()
 
 
-customer_post = Service(name='customer_post', path='/api/v1/customers', tags=['customers'])
+customers = Service(name='customers', path='/api/v1/customers/{uuid}', tags=[{'customers': 'Hello World'}], description='Customers')
 
 
-@customer_post.post(schema=CustomerSchema, validators=(marshmallow_body_validator,))
+@customers.post(schema=CustomerSchema, validators=(marshmallow_body_validator,), response_schemas=CustomerSchema)
 def _customer_post(request):
     """
-
     :param request:
     :return:
     """
-    uuid = request.validated['uuid']
-    return uuid
+    title = request.validated['title']
+    return {'title': title}
 
 
-customer_get = Service(name='customer_get', path='/api/v1/customers/{uuid}', tags=['customers'])
+# customer_get = Service(name='customer_get', path='/api/v1/customers/{uuid}', tags=['customers'])
 
 
-@customer_get.get()
+@customers.get()
 def _customer_get(request):
     return request.matchdict['uuid']
 
@@ -51,7 +50,6 @@ products_post = Service(name='products_post', path='/api/v1/products', tags=['pr
 @products_post.post(schema=ProductSchema, validators=(marshmallow_body_validator,))
 def _products_post(request):
     """
-
     :param request:
     :return:
     """
@@ -67,13 +65,12 @@ def _products_get(request):
     return request.matchdict['uuid']
 
 
-sale_post = Service(name='sale_post', path='/api/v1/sales', tags=['sales'])
+sale_post = Service(name='sale_post', path='/api/v1/sales', tags=['sales'], description='Sale service')
 
 
 @sale_post.post(schema=SaleSchema, validators=(marshmallow_body_validator,))
 def _sale_post(request):
     """
-
     :param request:
     :return:
     """
