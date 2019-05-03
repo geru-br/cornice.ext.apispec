@@ -4,6 +4,7 @@ import warnings
 
 from apispec import APISpec, BasePlugin
 from apispec.ext.marshmallow import MarshmallowPlugin
+from apispec.exceptions import DuplicateComponentNameError
 
 
 from cornice.service import get_services
@@ -191,11 +192,21 @@ class CorniceSwagger(object):
 
                 schema = args.get('schema', None)
                 if schema:
-                    spec.components.schema(schema.__name__, schema=schema)
-                    spec.components.parameter(schema.__name__, 'schema', service=service, schema=schema)
+                    try:
+                        spec.components.schema(schema.__name__, schema=schema)
+                    except DuplicateComponentNameError:
+                        pass
+
+                    try:
+                        spec.components.parameter(schema.__name__, 'schema', service=service, schema=schema)
+                    except DuplicateComponentNameError:
+                        pass
 
                 for parameter in get_parameter_from_path(service.path):
-                    spec.components.parameter(parameter, 'path', service=service)
+                    try:
+                        spec.components.parameter(parameter, 'path', service=service)
+                    except DuplicateComponentNameError:
+                        pass
 
         for service in get_services():
             spec.path(service=service)
