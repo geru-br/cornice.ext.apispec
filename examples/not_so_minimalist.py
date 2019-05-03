@@ -5,24 +5,29 @@ from wsgiref.simple_server import make_server
 from pyramid.config import Configurator
 
 
-class PostSchema(Schema):
+class CustomerSchema(Schema):
     id = fields.Str(dump_only=True)
     title = fields.Str()
-
 
 
 class ProductSchema(Schema):
     id = fields.Str(dump_only=True)
     title = fields.Str()
     name = fields.Str()
+    active = fields.Boolean()
 
 
-requests_post = Service(name='resources_post', path='/api/v1/resource', tags=['resources'])
-requests_get = Service(name='resource_get', path='/api/v1/resource/{uuid}', tags=['resources'])
+class SaleSchema(Schema):
+    customer = fields.Nested(CustomerSchema())
+    product = fields.Nested(ProductSchema())
+    quantity = fields.Decimal()
 
 
-@requests_post.post(schema=PostSchema, validators=(marshmallow_body_validator,))
-def _requests_post(request):
+customer_post = Service(name='customer_post', path='/api/v1/customers', tags=['customers'])
+
+
+@customer_post.post(schema=CustomerSchema, validators=(marshmallow_body_validator,))
+def _customer_post(request):
     """
 
     :param request:
@@ -32,14 +37,16 @@ def _requests_post(request):
     return uuid
 
 
-@requests_get.get()
-def _requests_get(request):
+customer_get = Service(name='customer_get', path='/api/v1/customers/{uuid}', tags=['customers'])
+
+
+@customer_get.get()
+def _customer_get(request):
     return request.matchdict['uuid']
 
 
-
 products_post = Service(name='products_post', path='/api/v1/products', tags=['products'])
-products_get = Service(name='products_get', path='/api/v1/products/{uuid}', tags=['products'])
+
 
 @products_post.post(schema=ProductSchema, validators=(marshmallow_body_validator,))
 def _products_post(request):
@@ -52,8 +59,33 @@ def _products_post(request):
     return uuid
 
 
+products_get = Service(name='products_get', path='/api/v1/products/{uuid}', tags=['products'])
+
+
 @products_get.get(response_schemas=ProductSchema)
 def _products_get(request):
+    return request.matchdict['uuid']
+
+
+sale_post = Service(name='sale_post', path='/api/v1/sales', tags=['sales'])
+
+
+@sale_post.post(schema=SaleSchema, validators=(marshmallow_body_validator,))
+def _sale_post(request):
+    """
+
+    :param request:
+    :return:
+    """
+    uuid = request.validated['uuid']
+    return uuid
+
+
+sale_get = Service(name='sale_get', path='/api/v1/sales/{uuid}', tags=['sales'])
+
+
+@sale_get.get(response_schemas=ProductSchema)
+def _sale_get(request):
     return request.matchdict['uuid']
 
 
