@@ -1,0 +1,1 @@
+Just a example using jsonapi marshmellow lib

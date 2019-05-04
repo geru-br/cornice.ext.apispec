@@ -5,7 +5,7 @@ import warnings
 from apispec import APISpec, BasePlugin
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec.exceptions import DuplicateComponentNameError
-
+from apispec.utils import build_reference
 
 from cornice.service import get_services
 
@@ -21,6 +21,9 @@ class CornicePlugin(BasePlugin):
 
         for method, view, args in service.definitions:
 
+            if method.lower() in map(str.lower, self.ignore_methods):
+                continue
+
             tags = []
 
             if hasattr(service, 'tags') and isinstance(service.tags, list):
@@ -30,9 +33,6 @@ class CornicePlugin(BasePlugin):
                     else:
                         tags.append(tag)
 
-            if method.lower() in map(str.lower, self.ignore_methods):
-                continue
-
             schema = args.get('schema', None)
             if schema:
 
@@ -40,8 +40,7 @@ class CornicePlugin(BasePlugin):
                                        {'description': service.description,
                                         'tags': tags,
                                         'requestBody': {'content': {'application/json': {'schema': schema.__name__}}},
-                                        'responses': {200: {'content': {'application/json':
-                                                                            {'schema': schema.__name__}}}}}})
+                                        'responses': {200: '200_' + schema.__name__}}})
             else:
                 operations.update({method.lower():
                                        {'description': service.description,
@@ -53,6 +52,14 @@ class CornicePlugin(BasePlugin):
 
     def parameter_helper(self, parameter, service,  **kwargs):
         return parameter
+
+    # def response_helper(self, response, service, status_code, schema, **kwargs):
+
+    def response_helper(self, response, schema, status_code, **kwargs):
+
+        schema_ref = build_reference('schema', 3,  schema.__name__)
+
+        return {'content': {'application/json': {'schema': schema_ref}}}
 
 
 
@@ -187,7 +194,7 @@ class CorniceSwagger(object):
         swagger = swagger or self.swagger
         base_path = base_path or self.base_path
 
-        spec = APISpec(
+        self.spec = APISpec(
             title=title,
             version=version,
             openapi_version="3.0.2",
@@ -196,38 +203,69 @@ class CorniceSwagger(object):
         )
 
         for service in get_services():
-            for method, view, args in service.definitions:
 
-                if method.lower() in map(str.lower, self.ignore_methods):
-                    continue
+            self.generate_schemas(service)
+            self.generate_responses(service)
+            self.generate_parameters(service)
 
-                schema = args.get('schema', None)
-                if schema:
-                    try:
-                        spec.components.schema(schema.__name__, schema=schema)
-                    except DuplicateComponentNameError:
-                        pass
+            self.generate_tags(service)
 
-                    try:
-                        spec.components.parameter(schema.__name__, 'schema', service=service, schema=schema)
-                    except DuplicateComponentNameError:
-                        pass
+            self.spec.path(service=service)
 
-                for parameter in get_parameter_from_path(service.path):
-                    try:
-                        spec.components.parameter(parameter, 'path', service=service)
-                    except DuplicateComponentNameError:
-                        pass
-            if hasattr(service, 'tags'):
-                for tag in service.tags:
-                    if isinstance(tag, dict):
-                        for key, value in tag.items():
-                            spec.tag({'name': key, 'description': value})
-                    else:
-                        spec.tag({'name': tag, 'description': service.description})
+        return self.spec.to_dict()
 
-        for service in get_services():
-            spec.path(service=service)
+    def generate_responses(self, service):
 
-        return spec.to_dict()
+        for method, view, args in service.definitions:
+            for key, value in args.get('response_schemas', {}).items():
+                component_id = '{}_{}'.format(key, value.__name__)
+                try:
+                    self.spec.components.response(component_id, service=service, schema=value, status_code=key)
+                except DuplicateComponentNameError:
+                    pass
+
+    def generate_schemas(self, service):
+
+        for method, view, args in service.definitions:
+
+            schemas = list()
+            schemas.append(args.get('schema', None))
+
+            schemas.extend(args.get('responses_schema', []))
+
+            for schema in [schema for schema in schemas if schema]:
+                try:
+                    self.spec.components.schema(schema.__name__, schema=schema)
+                except DuplicateComponentNameError:
+                    pass
+
+                try:
+                    self.spec.components.parameter(schema.__name__, 'schema', service=service, schema=schema)
+                except DuplicateComponentNameError:
+                    pass
+
+    def generate_tags(self, service):
+
+        if hasattr(service, 'tags'):
+            for tag in service.tags:
+                if isinstance(tag, dict):
+                    for key, value in tag.items():
+                        self.spec.tag({'name': key, 'description': value})
+                else:
+                    self.spec.tag({'name': tag, 'description': service.description})
+
+    def generate_parameters(self, service):
+
+        for method, view, args in service.definitions:
+
+            if method.lower() in map(str.lower, self.ignore_methods):
+                continue
+
+            for parameter in get_parameter_from_path(service.path):
+                try:
+                    self.spec.components.parameter(parameter, 'path', service=service)
+                except DuplicateComponentNameError:
+                    pass
+
+
 
