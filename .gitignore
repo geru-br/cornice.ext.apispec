@@ -95,4 +95,5 @@ docs/build
 # Swap files
 *.swo
 *.swp
+.idea
 
