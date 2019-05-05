@@ -32,8 +32,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-cornice_apispec">cornice_enable_openapi_view directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-cornice_apispec">cornice_enable_openapi_explorer directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#generator-internals">Generator Internals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#section-handlers">Section Handlers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#colander-converters">Colander converters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#section-plugins">Section Plugins</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQ)</a></li>
@@ -230,16 +229,40 @@ to provide additional information to build methods as such ignores.</p>
 <div class="section" id="generator-internals">
 <h2>Generator Internals<a class="headerlink" href="#generator-internals" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="section-handlers">
-<h2>Section Handlers<a class="headerlink" href="#section-handlers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="section-plugins">
+<h2>Section Plugins<a class="headerlink" href="#section-plugins" title="Permalink to this headline">¶</a></h2>
 <p>Swagger definitions and parameters are handled in separate classes. You may overwrite
 those if you want to change the converters behaviour.</p>
-</div>
-<div class="section" id="colander-converters">
-<h2>Colander converters<a class="headerlink" href="#colander-converters" title="Permalink to this headline">¶</a></h2>
-<p>You may use the <code class="docutils literal notranslate"><span class="pre">cornice_apispec.converters</span></code> submodule to access the colander
-to swagger request and schema converters. These may be also used without
-<code class="docutils literal notranslate"><span class="pre">cornice_apispec</span></code> generators.</p>
+<dl class="class">
+<dt id="cornice_apispec.plugins.cornice.CornicePlugin">
+<em class="property">class </em><code class="descclassname">cornice_apispec.plugins.cornice.</code><code class="descname">CornicePlugin</code><a class="headerlink" href="#cornice_apispec.plugins.cornice.CornicePlugin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cornice_apispec.plugins.cornice.CornicePlugin.__init__">
+<code class="descclassname">CornicePlugin.</code><code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cornice_apispec.plugins.cornice.CornicePlugin.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cornice_apispec.plugins.cornice.CornicePlugin.path_helper">
+<code class="descclassname">CornicePlugin.</code><code class="descname">path_helper</code><span class="sig-paren">(</span><em>operations</em>, <em>service</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#cornice_apispec.plugins.cornice.CornicePlugin.path_helper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path helper that parses docstrings for operations. Adds a
+<code class="docutils literal notranslate"><span class="pre">func</span></code> parameter to <cite>apispec.APISpec.path</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cornice_apispec.plugins.cornice.CornicePlugin.parameter_helper">
+<code class="descclassname">CornicePlugin.</code><code class="descname">parameter_helper</code><span class="sig-paren">(</span><em>parameter</em>, <em>service</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#cornice_apispec.plugins.cornice.CornicePlugin.parameter_helper" title="Permalink to this definition">¶</a></dt>
+<dd><p>May return parameter component description as a dict.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cornice_apispec.plugins.cornice.CornicePlugin.response_helper">
+<code class="descclassname">CornicePlugin.</code><code class="descname">response_helper</code><span class="sig-paren">(</span><em>response</em>, <em>schema</em>, <em>status_code</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#cornice_apispec.plugins.cornice.CornicePlugin.response_helper" title="Permalink to this definition">¶</a></dt>
+<dd><p>May return response component description as a dict.</p>
+</dd></dl>
+
 </div>
 </div>
 

@@ -32,40 +32,20 @@ cornice_enable_openapi_explorer directive
 Generator Internals
 ===================
 
-.. automethod:: cornice_apispec.swagger.CorniceSwagger._build_paths
-.. automethod:: cornice_apispec.swagger.CorniceSwagger._extract_path_from_service
-.. automethod:: cornice_apispec.swagger.CorniceSwagger._extract_operation_from_view
+.. automethod:: cornice_apispec.swagger.CorniceSwagger.SchemasHelper
+.. automethod:: cornice_apispec.swagger.CorniceSwagger.ResponseHelper
 
-Section Handlers
+
+Section Plugins
 ================
 
 Swagger definitions and parameters are handled in separate classes. You may overwrite
 those if you want to change the converters behaviour.
 
 
-.. autoclass:: cornice_apispec.swagger.DefinitionHandler
-.. automethod:: cornice_apispec.swagger.DefinitionHandler.__init__
-.. automethod:: cornice_apispec.swagger.DefinitionHandler.from_schema
-.. automethod:: cornice_apispec.swagger.DefinitionHandler._ref_recursive
+.. autoclass:: cornice_apispec.plugins.cornice.CornicePlugin
+.. automethod:: cornice_apispec.plugins.cornice.CornicePlugin.__init__
+.. automethod:: cornice_apispec.plugins.cornice.CornicePlugin.path_helper
+.. automethod:: cornice_apispec.plugins.cornice.CornicePlugin.parameter_helper
+.. automethod:: cornice_apispec.plugins.cornice.CornicePlugin.response_helper
 
-.. autoclass:: cornice_apispec.swagger.ParameterHandler
-.. automethod:: cornice_apispec.swagger.ParameterHandler.__init__
-.. automethod:: cornice_apispec.swagger.ParameterHandler.from_schema
-.. automethod:: cornice_apispec.swagger.ParameterHandler.from_path
-.. automethod:: cornice_apispec.swagger.ParameterHandler._ref
-
-.. autoclass:: cornice_apispec.swagger.ResponseHandler
-.. automethod:: cornice_apispec.swagger.ResponseHandler.__init__
-.. automethod:: cornice_apispec.swagger.ResponseHandler.from_schema_mapping
-.. automethod:: cornice_apispec.swagger.ResponseHandler._ref
-
-Colander converters
-===================
-
-You may use the ``cornice_apispec.converters`` submodule to access the colander
-to swagger request and schema converters. These may be also used without
-``cornice_apispec`` generators.
-
-.. automodule:: cornice_apispec.converters
-.. autofunction:: cornice_apispec.converters.convert_schema
-.. autofunction:: cornice_apispec.converters.convert_parameter
