@@ -70,116 +70,106 @@ The resulting `swagger.json` at `http://localhost:8000/__api__` is:
 .. code-block:: json
 
     {
-        "swagger": "2.0",
-        "info": {
-            "version": "1.0.0",
-            "title": "MyAPI"
-        },
-        "basePath": "/",
-        "tags": [
-            {
-                "name": "values"
-            }
-        ]
-        "paths": {
-            "/values/{key}": {
-                "parameters": [
-                    {
-                        "name": "value",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "get": {
-                    "tags": [
-                        "values"
-                    ],
-                    "responses": {
-                        "200": {
-                            "description": "Return value",
-                            "schema": {
-                                "required": [
-                                    "value"
-                                ],
-                                "type": "object",
-                                "properties": {
-                                    "value": {
-                                        "type": "string",
-                                        "description": "My precious value",
-                                        "title": "Value"
-                                    }
-                                },
-                                "title": "BodySchema"
-                            }
-                        }
-
-                    },
-                    "produces": [
-                        "application/json"
-                    ]
-                },
-                "put": {
-                    "tags": [
-                        "values"
-                    ],
-                    "parameters": [
-                        {
-                            "name": "PutBodySchema",
-                            "in": "body",
-                            "schema": {
-                                "required": [
-                                    "value"
-                                ],
-                                "type": "object",
-                                "properties": {
-                                    "value": {
-                                        "type": "string",
-                                        "description": "My precious value",
-                                        "title": "Value"
-                                    }
-                                },
-                                "title": "PutBodySchema"
-                            },
-                            "required": true
-                        }
-                    ],
-                    "produces": [
-                        "application/json"
-                    ],
-                    "responses": {
-                        "200": {
-                            "description": "Return value",
-                            "schema": {
-                                "required": [
-                                    "value"
-                                ],
-                                "type": "object",
-                                "properties": {
-                                    "value": {
-                                        "type": "string",
-                                        "description": "My precious value",
-                                        "title": "Value"
-                                    }
-                                },
-                                "title": "BodySchema"
-                            }
-                        }
-                    }
+      "info": {
+        "title": "MyAPI",
+        "version": "1.0.0"
+      },
+      "paths": {
+        "/api/v1/resource": {
+          "post": {
+            "description": null,
+            "tags": [
+              "resources"
+            ],
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostSchema"
+                  }
                 }
+              }
             },
-            "/__api__": {
-                "get": {
-                    "responses": {
-                        "default": {
-                            "description": "UNDOCUMENTED RESPONSE"
-                        }
-                    },
-                    "produces": [
-                        "application/json"
-                    ]
-                }
-            }
-        }
-    }
+            "parameters": [
 
+            ],
+            "responses": {
+              "200": {
+                "$ref": "#/components/responses/default"
+              }
+            }
+          }
+        },
+        "/api/v1/resource/{uuid}": {
+          "get": {
+            "description": null,
+            "tags": [
+              "resources"
+            ],
+            "parameters": [
+              {
+                "$ref": "#/components/parameters/uuid"
+              }
+            ],
+            "responses": {
+              "200": {
+                "$ref": "#/components/responses/default"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        {
+          "name": "resources",
+          "description": null
+        },
+        {
+          "name": "resources",
+          "description": null
+        }
+      ],
+      "openapi": "3.0.2",
+      "components": {
+        "schemas": {
+          "PostSchema": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          }
+        },
+        "parameters": {
+          "uuid": {
+            "name": "uuid",
+            "in": "path",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": true
+          }
+        },
+        "responses": {
+          "default": {
+            "description": "Default Response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
