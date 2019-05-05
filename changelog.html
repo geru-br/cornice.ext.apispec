@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Changelog &#8212; Cornice Swagger 0.3.0 documentation</title>
+    <link rel="stylesheet" href="_static/mozilla.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributors" href="contributors.html" />
+    <link rel="prev" title="Frequently Asked Questions (FAQ)" href="faq.html" /> 
+  </head><body><a href="http://www.mozilla.org/" id="tabzilla">mozilla</a>
+
+    <div class="document">
+  <div class="documentwrapper">
+    
+    <div class="sphinxsidebar">
+        <nav>
+        <h2><a href="index.html">Cornice Swagger</a></h2>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Full Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Cornice Swagger API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors</a></li>
+</ul>
+
+        </nav>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+    </div>
+    <div class="bodywrapper">
+      <div class="body">
+        
+  <div class="section" id="changelog">
+<span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="changes">
+<h2>CHANGES<a class="headerlink" href="#changes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="unreleased">
+<h3>0.7.1 (unreleased)<a class="headerlink" href="#unreleased" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Nothing changed yet.</p></li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h3>0.7.0 (2018-07-29)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p>Support swagger <code class="docutils literal notranslate"><span class="pre">example</span></code> field on colander <code class="docutils literal notranslate"><span class="pre">SchemaNode</span></code> custom kwarg:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">SomeSchema</span><span class="p">(</span><span class="n">colander</span><span class="o">.</span><span class="n">MappingSchema</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">colander</span><span class="o">.</span><span class="n">SchemaNode</span><span class="p">(</span><span class="n">colander</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span> <span class="n">example</span><span class="o">=</span><span class="s1">&#39;Mr. IceCream&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">example</span></code> field is returned in the swagger spec accordingly.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h3>0.6.0 (2018-03-28)<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">cornice_enable_openapi_view()</span></code> <code class="docutils literal notranslate"><span class="pre">cornice_enable_openapi_explorer()</span></code>
+Pyramid directives to serve the API Explorer and the spec information (#79)</p></li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h3>0.5.5 (2018-03-19)<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Prevent failure with non-colander schemas (#78, thanks &#64;ergo!)</p></li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h3>0.5.4 (2018-02-26)<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p><strong>Internals</strong></p>
+<ul class="simple">
+<li><p>Fix return types in docstrings (#77)</p></li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h3>0.5.3 (2018-02-14)<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p><strong>Pyramid compliance</strong></p>
+<ul class="simple">
+<li><p>Handle callables for <code class="docutils literal notranslate"><span class="pre">cornice.service.Service.content_type</span></code> argument.
+For more details, see: <a class="reference external" href="http://cornice.readthedocs.io/en/latest/api.html#cornice.service.Service">http://cornice.readthedocs.io/en/latest/api.html#cornice.service.Service</a>.</p></li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h3>0.5.2 (2017-11-07)<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p><strong>Internals</strong></p>
+<ul class="simple">
+<li><p>Add classifiers to the Python package.</p></li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h3>0.5.1 (2017-04-10)<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p><strong>Pyramid compliance</strong></p>
+<ul class="simple">
+<li><p>Support subpaths and regex when parsing paths (#68).</p></li>
+</ul>
+<p><strong>Api</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">_extract_path_from_service</span></code>, now returns the path name along with the path
+swagger object (#68).</p></li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h3>0.5.0 (2017-02-14)<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<p><strong>Api</strong></p>
+<ul class="simple">
+<li><p>Allow implementing a custom generator by subclassing the <code class="docutils literal notranslate"><span class="pre">CorniceSwagger</span></code> class (#63).</p></li>
+<li><p>Introduced a new method <code class="docutils literal notranslate"><span class="pre">CorniceSwagger.generate</span></code> to generate the spec (#63).</p></li>
+<li><p>Deprecated <code class="docutils literal notranslate"><span class="pre">CorniceSwagger</span></code> call method. You should now use <code class="docutils literal notranslate"><span class="pre">generate</span></code> (#63).</p></li>
+<li><p>Removed deprecated <code class="docutils literal notranslate"><span class="pre">generate_swagger_spec</span></code> call. (#64).</p></li>
+<li><p>Allow defining custom type converters on the <code class="docutils literal notranslate"><span class="pre">CorniceSwagger</span></code> class. (#65)</p></li>
+</ul>
+<p><strong>Internals</strong></p>
+<ul class="simple">
+<li><p>Fixed coveralls repeated messages on PRs. (#62).</p></li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h3>0.4.0 (2017-01-25)<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<p><strong>Api</strong></p>
+<ul class="simple">
+<li><p>Summaries from docstrings are now not included by default. You can enable them by passing
+<code class="docutils literal notranslate"><span class="pre">summary_docstrings</span> <span class="pre">=</span> <span class="pre">True</span></code> to the generator.</p></li>
+<li><p>Trying to document multiple views on same method now raises an exception. You should
+ignore the unwanted ones by content type.</p></li>
+<li><p>Raw <code class="docutils literal notranslate"><span class="pre">swagger</span></code> items are now recursively merged (instead of replaced) with
+the extracted fields.</p></li>
+<li><p>Add support for documenting operation ids via an <code class="docutils literal notranslate"><span class="pre">operation_id</span></code> argument on the view
+or by passing a <code class="docutils literal notranslate"><span class="pre">default_op_ids</span></code> callable to the generator.</p></li>
+<li><p>Add a shortcut to the generator on <code class="docutils literal notranslate"><span class="pre">cornice_swagger.CorniceSwagger</span></code>.</p></li>
+<li><p>Support Cornice schema synonyms (headers and GET are the same as header and querystring).</p></li>
+<li><p>Add support for documenting security properties via a <code class="docutils literal notranslate"><span class="pre">api_security</span></code> list on the view
+or by passing a <code class="docutils literal notranslate"><span class="pre">default_security</span></code> list or callable to the generator.</p></li>
+</ul>
+<p><strong>OpenAPI compliance</strong></p>
+<ul class="simple">
+<li><p>Remove invalid <code class="docutils literal notranslate"><span class="pre">title</span></code> field from response headers and request parameters.</p></li>
+<li><p>Support conversion of parameter validators.</p></li>
+</ul>
+<p><strong>Internals</strong></p>
+<ul class="simple">
+<li><p>Fix default tag generator.</p></li>
+<li><p>Fix references when using declarative schemas.</p></li>
+<li><p>Simplify parameter converter by properly isolating <code class="docutils literal notranslate"><span class="pre">body</span></code>.</p></li>
+</ul>
+</div>
+<div class="section" id="id11">
+<h3>0.3.0 (2017-01-17)<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<p><strong>Api</strong></p>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">cornice_swagger.swagger.CorniceSwagger</span></code> class to generate
+the swagger document rather then <code class="docutils literal notranslate"><span class="pre">generate_swagger_spec</span></code>.</p></li>
+<li><p>Allow overriding extractors in the application.</p></li>
+<li><p>Schemas are now broken into JSON pointers only if specified.</p></li>
+<li><p>Allow documenting responses via <code class="docutils literal notranslate"><span class="pre">response_schemas</span></code> view attribute.</p></li>
+<li><p>Allow documenting tags via <code class="docutils literal notranslate"><span class="pre">tags</span></code> view attribute or using a
+<code class="docutils literal notranslate"><span class="pre">default_tags</span></code> parameter when calling the generator.</p></li>
+</ul>
+<p><strong>Internals</strong></p>
+<ul class="simple">
+<li><p>Decouples converters from path generators.</p></li>
+<li><p>Make considerable changes in the package organisation.</p></li>
+<li><p>Reach 100% coverage on tests.</p></li>
+</ul>
+<p><strong>Documentation</strong></p>
+<ul class="simple">
+<li><p>Create a Sphinx documentation hosted on
+<a class="reference external" href="https://cornices.github.io/cornice.ext.swagger">https://cornices.github.io/cornice.ext.swagger</a>.</p></li>
+</ul>
+</div>
+<div class="section" id="id12">
+<h3>0.2.1 (2016-12-10)<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Check if schema is not instantiated.</p></li>
+<li><p>Add support for query parameter description. [ridha]</p></li>
+</ul>
+</div>
+<div class="section" id="id13">
+<h3>0.2 (2016-11-08)<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Pypi release.</p></li>
+<li><p>Point scaffold doc to right url.</p></li>
+</ul>
+</div>
+<div class="section" id="id14">
+<h3>0.1 (2016-11-05)<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>First release for new cornice 2.0</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+  </div>
+      <div class="clearer"></div>
+    </div>
+  
+ 
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016-2017, Josip Delic.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div> <script src="//www.mozilla.org/tabzilla/media/js/tabzilla.js"></script> 
+  </body>
+</html>

@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Cornice APISpec &#8212; Cornice Swagger 0.3.0 documentation</title>
+    <link rel="stylesheet" href="_static/mozilla.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstart" href="quickstart.html" /> 
+  </head><body><a href="http://www.mozilla.org/" id="tabzilla">mozilla</a>
+
+    <div class="document">
+  <div class="documentwrapper">
+    
+    <div class="sphinxsidebar">
+        <nav>
+        <h2><a href="#">Cornice Swagger</a></h2>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Full Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Cornice Swagger API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQ)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors</a></li>
+</ul>
+
+        </nav>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+    </div>
+    <div class="bodywrapper">
+      <div class="body">
+        
+  <div class="section" id="cornice-apispec">
+<h1>Cornice APISpec<a class="headerlink" href="#cornice-apispec" title="Permalink to this headline">¶</a></h1>
+<p><strong>Cornice APISpec</strong> is an extension package for <a class="reference external" href="https://cornice.readthedocs.io/">Cornice</a>
+that allows generating an OpenAPI/Swagger specification from Cornice service definitions.</p>
+<div class="section" id="what-does-it-do">
+<h2>What does it do?<a class="headerlink" href="#what-does-it-do" title="Permalink to this headline">¶</a></h2>
+<p>Cornice swagger builds a valid OpenAPI document with basically these things:</p>
+<ol class="arabic simple">
+<li><p>Path listing and parameters from service path definitions.</p></li>
+<li><p>Methods defined from each service view.</p></li>
+<li><p>Descriptions from view docstrings.</p></li>
+<li><p>Parameters from request schemas when using cornice/colander validators on the
+view definition.</p></li>
+<li><p>Produced content-types when using colander renderers.</p></li>
+<li><p>Accepted content types when they are provided on view definitions.</p></li>
+<li><p>Allow user defined tags and responses on view definitions.</p></li>
+</ol>
+</div>
+<div class="section" id="documentation-content">
+<h2>Documentation content<a class="headerlink" href="#documentation-content" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#installing">Installing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#using-a-scaffold">Using a scaffold</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#show-me-a-minimalist-useful-example">Show me a minimalist useful example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Full Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#using-the-pyramid-hook">Using the Pyramid Hook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#extracting-path-parameters">Extracting path parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#extracting-parameters-from-cornice-schemas">Extracting parameters from cornice schemas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#extracting-produced-types-from-renderers">Extracting produced types from renderers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#extracting-accepted-types-from-content-type-field">Extracting accepted types from content_type field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#documenting-responses">Documenting responses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#documenting-tags">Documenting tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#generating-summaries-with-view-docstrings">Generating summaries with view docstrings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial.html#custom-swagger-ui-script-bootstrap">Custom Swagger UI &lt;script&gt; bootstrap</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Cornice Swagger API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-cornice_swagger">Basic Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-cornice_swagger">cornice_enable_openapi_view directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-cornice_swagger">cornice_enable_openapi_explorer directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#generator-internals">Generator Internals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#section-handlers">Section Handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#colander-converters">Colander converters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQ)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-to-make-a-schema-parameter-not-required">How to make a schema parameter not required?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-to-define-a-schema-with-additionalattributes">How to define a schema with additionalAttributes?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-integrate-swagger-ui">How do I integrate Swagger UI?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-work-with-colander-schemas-that-require-bound-properties">How do I work with colander schemas that require bound properties?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="contribution-feedback">
+<h2>Contribution &amp; Feedback<a class="headerlink" href="#contribution-feedback" title="Permalink to this headline">¶</a></h2>
+<p>You can find us at Github or the Slack chat.</p>
+<ul class="simple">
+<li><p>GitHub Repository: <a class="reference external" href="https://github.com/geru-br/cornice.ext.apispec">https://github.com/geru-br/cornice.ext.apispec</a></p></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+  </div>
+      <div class="clearer"></div>
+    </div>
+  
+ 
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016-2017, Josip Delic.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+    </div> <script src="//www.mozilla.org/tabzilla/media/js/tabzilla.js"></script> 
+  </body>
+</html>
