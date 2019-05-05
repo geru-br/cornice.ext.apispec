@@ -463,6 +463,24 @@ by providing your own callable path in config.</p>
 <p>The default one is:</p>
 <p><code class="docutils literal notranslate"><span class="pre">cornice_swagger.swagger_ui_script_generator</span> <span class="pre">=</span> <span class="pre">cornice_swagger.views:swagger_ui_script_template</span></code></p>
 <p>It points to the following callable that accepts a request object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">swagger_ui_script_template</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param request:</span>
+<span class="sd">    :return:</span>
+
+<span class="sd">    Generates the &lt;script&gt; code that bootstraps Swagger UI, it will be injected</span>
+<span class="sd">    into index template</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">swagger_spec_url</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">route_url</span><span class="p">(</span><span class="s1">&#39;cornice_apispec.open_api_path&#39;</span><span class="p">)</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_string</span><span class="p">(</span>
+        <span class="s1">&#39;cornice_apispec&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;templates/index_script_template.html&#39;</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Template</span><span class="p">(</span><span class="n">template</span><span class="p">)</span><span class="o">.</span><span class="n">safe_substitute</span><span class="p">(</span>
+        <span class="n">swagger_spec_url</span><span class="o">=</span><span class="n">swagger_spec_url</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 

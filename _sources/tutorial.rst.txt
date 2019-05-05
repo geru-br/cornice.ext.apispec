@@ -475,7 +475,7 @@ The default one is:
 
 It points to the following callable that accepts a request object:
 
-.. literalinclude:: ../../cornice_swagger/views.py
+.. literalinclude:: ../../cornice_apispec/views.py
     :pyobject: swagger_ui_script_template
     :language: python
 
