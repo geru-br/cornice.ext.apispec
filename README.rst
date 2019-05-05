@@ -1,5 +1,8 @@
-Cornice apipec
+Cornice apispec
 ===============
+
+WARNING: it is not working.
+===========================
 
 |pypi| |docs| |slack| |travis| |master-coverage|
 
