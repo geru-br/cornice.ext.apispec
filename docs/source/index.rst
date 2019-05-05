@@ -1,7 +1,7 @@
-Cornice Swagger
+Cornice APISpec
 ###############
 
-**Cornice Swagger** is an extension package for `Cornice <https://cornice.readthedocs.io/>`_
+**Cornice APISpec** is an extension package for `Cornice <https://cornice.readthedocs.io/>`_
 that allows generating an OpenAPI/Swagger specification from Cornice service definitions.
 
 What does it do?
@@ -42,9 +42,6 @@ Contribution & Feedback
 
 You can find us at Github or the Slack chat.
 
-- GitHub Repository: https://github.com/Cornices/cornice.ext.swagger
-- Slack chat: https://corniceswagger.herokuapp.com
+- GitHub Repository: https://github.com/geru-br/cornice.ext.apispec
 
-You may also try the Cornice Mailing List:
 
-- Cornice Developers Mailing List: https://mail.mozilla.org/listinfo/services-dev
