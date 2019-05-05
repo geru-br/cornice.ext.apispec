@@ -68,44 +68,6 @@ may be overwritten by applications.</p>
 <em class="property">class </em><code class="descclassname">cornice_apispec.swagger.</code><code class="descname">CorniceSwagger</code><span class="sig-paren">(</span><em>services=None</em>, <em>def_ref_depth=0</em>, <em>param_ref=False</em>, <em>resp_ref=False</em>, <em>pyramid_registry=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cornice_apispec.swagger.CorniceSwagger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the creation of a swagger document from a cornice application.</p>
 <dl class="attribute">
-<dt id="cornice_apispec.swagger.CorniceSwagger.custom_type_converters">
-<code class="descname">custom_type_converters</code><em class="property"> = {}</em><a class="headerlink" href="#cornice_apispec.swagger.CorniceSwagger.custom_type_converters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mapping for supporting custom types conversion on the default TypeConverter.
-Should map <cite>colander.TypeSchema</cite> to <cite>cornice_apispec.converters.schema.TypeConverter</cite>
-callables.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cornice_apispec.swagger.CorniceSwagger.default_type_converter">
-<code class="descname">default_type_converter</code><em class="property"> = None</em><a class="headerlink" href="#cornice_apispec.swagger.CorniceSwagger.default_type_converter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Supplies a default type converter matching the interface of
-<cite>cornice_apispec.converters.schema.TypeConverter</cite> to be used with unknown types.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cornice_apispec.swagger.CorniceSwagger.default_tags">
-<code class="descname">default_tags</code><em class="property"> = None</em><a class="headerlink" href="#cornice_apispec.swagger.CorniceSwagger.default_tags" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide a default list of tags or a callable that takes a cornice
-service and the method name (e.g GET) and returns a list of Swagger
-tags to be used if not provided by the view.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cornice_apispec.swagger.CorniceSwagger.default_op_ids">
-<code class="descname">default_op_ids</code><em class="property"> = None</em><a class="headerlink" href="#cornice_apispec.swagger.CorniceSwagger.default_op_ids" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide a callable that takes a cornice service and the method name
-(e.g. GET) and returns an operation Id that is used if an operation Id is
-not provided. Each operation Id should be unique.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="cornice_apispec.swagger.CorniceSwagger.default_security">
-<code class="descname">default_security</code><em class="property"> = None</em><a class="headerlink" href="#cornice_apispec.swagger.CorniceSwagger.default_security" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provide a default list or a callable that takes a cornice service and
-the method name (e.g. GET) and returns a list of OpenAPI security policies.</p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="cornice_apispec.swagger.CorniceSwagger.summary_docstrings">
 <code class="descname">summary_docstrings</code><em class="property"> = False</em><a class="headerlink" href="#cornice_apispec.swagger.CorniceSwagger.summary_docstrings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enable extracting operation summaries from view docstrings.</p>
@@ -231,12 +193,14 @@ to provide additional information to build methods as such ignores.</p>
 <dl class="method">
 <dt id="cornice_apispec.helpers.SchemasHelper">
 <code class="descclassname">helpers.</code><code class="descname">SchemasHelper</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cornice_apispec.helpers.SchemasHelper" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Extract defined schema at service</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="cornice_apispec.helpers.ResponseHelper">
 <code class="descclassname">helpers.</code><code class="descname">ResponseHelper</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cornice_apispec.helpers.ResponseHelper" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Extract response from service</p>
+</dd></dl>
 
 </div>
 <div class="section" id="section-plugins">
@@ -256,7 +220,7 @@ those if you want to change the converters behaviour.</p>
 
 <dl class="method">
 <dt id="cornice_apispec.plugins.cornice.CornicePlugin.path_helper">
-<code class="descclassname">CornicePlugin.</code><code class="descname">path_helper</code><span class="sig-paren">(</span><em>operations</em>, <em>service</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#cornice_apispec.plugins.cornice.CornicePlugin.path_helper" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">CornicePlugin.</code><code class="descname">path_helper</code><span class="sig-paren">(</span><em>operations</em>, <em>service</em>, <em>ignore_methods=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#cornice_apispec.plugins.cornice.CornicePlugin.path_helper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Path helper that parses docstrings for operations. Adds a
 <code class="docutils literal notranslate"><span class="pre">func</span></code> parameter to <cite>apispec.APISpec.path</cite>.</p>
 </dd></dl>
