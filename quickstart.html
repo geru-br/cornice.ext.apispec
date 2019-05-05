@@ -166,117 +166,108 @@ serve API explorer on your application:</p>
 </div>
 <p>The resulting <cite>swagger.json</cite> at <cite>http://localhost:8000/__api__</cite> is:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;swagger&quot;</span><span class="p">:</span> <span class="s2">&quot;2.0&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;info&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
-        <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;MyAPI&quot;</span>
-    <span class="p">},</span>
-    <span class="nt">&quot;basePath&quot;</span><span class="p">:</span> <span class="s2">&quot;/&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-            <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;values&quot;</span>
-        <span class="p">}</span>
-    <span class="p">]</span>
-    <span class="s2">&quot;paths&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="nt">&quot;/values/{key}&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span>
-                    <span class="nt">&quot;in&quot;</span><span class="p">:</span> <span class="s2">&quot;path&quot;</span><span class="p">,</span>
-                    <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-                <span class="p">}</span>
-            <span class="p">],</span>
-            <span class="nt">&quot;get&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;values&quot;</span>
-                <span class="p">],</span>
-                <span class="nt">&quot;responses&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">&quot;200&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Return value&quot;</span><span class="p">,</span>
-                        <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                <span class="s2">&quot;value&quot;</span>
-                            <span class="p">],</span>
-                            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                            <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;My precious value&quot;</span><span class="p">,</span>
-                                    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span>
-                                <span class="p">}</span>
-                            <span class="p">},</span>
-                            <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;BodySchema&quot;</span>
-                        <span class="p">}</span>
-                    <span class="p">}</span>
-
-                <span class="p">},</span>
-                <span class="nt">&quot;produces&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;application/json&quot;</span>
-                <span class="p">]</span>
-            <span class="p">},</span>
-            <span class="nt">&quot;put&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;values&quot;</span>
-                <span class="p">],</span>
-                <span class="nt">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="p">{</span>
-                        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;PutBodySchema&quot;</span><span class="p">,</span>
-                        <span class="nt">&quot;in&quot;</span><span class="p">:</span> <span class="s2">&quot;body&quot;</span><span class="p">,</span>
-                        <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                <span class="s2">&quot;value&quot;</span>
-                            <span class="p">],</span>
-                            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                            <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;My precious value&quot;</span><span class="p">,</span>
-                                    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span>
-                                <span class="p">}</span>
-                            <span class="p">},</span>
-                            <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;PutBodySchema&quot;</span>
-                        <span class="p">},</span>
-                        <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">true</span>
-                    <span class="p">}</span>
-                <span class="p">],</span>
-                <span class="nt">&quot;produces&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;application/json&quot;</span>
-                <span class="p">],</span>
-                <span class="nt">&quot;responses&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">&quot;200&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Return value&quot;</span><span class="p">,</span>
-                        <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                <span class="s2">&quot;value&quot;</span>
-                            <span class="p">],</span>
-                            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                            <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="nt">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;My precious value&quot;</span><span class="p">,</span>
-                                    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span>
-                                <span class="p">}</span>
-                            <span class="p">},</span>
-                            <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;BodySchema&quot;</span>
-                        <span class="p">}</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
+  <span class="nt">&quot;info&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;MyAPI&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0.0&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;paths&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;/api/v1/resource&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;post&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="s2">&quot;resources&quot;</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;requestBody&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;content&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;application/json&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/components/schemas/PostSchema&quot;</span>
+              <span class="p">}</span>
             <span class="p">}</span>
+          <span class="p">}</span>
         <span class="p">},</span>
-        <span class="nt">&quot;/__api__&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="nt">&quot;get&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">&quot;responses&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;UNDOCUMENTED RESPONSE&quot;</span>
-                    <span class="p">}</span>
-                <span class="p">},</span>
-                <span class="nt">&quot;produces&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;application/json&quot;</span>
-                <span class="p">]</span>
-            <span class="p">}</span>
+        <span class="nt">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">[</span>
+
+        <span class="p">],</span>
+        <span class="nt">&quot;responses&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;200&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/components/responses/default&quot;</span>
+          <span class="p">}</span>
         <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;/api/v1/resource/{uuid}&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;get&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="s2">&quot;resources&quot;</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="nt">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/components/parameters/uuid&quot;</span>
+          <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;responses&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;200&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/components/responses/default&quot;</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
     <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;resources&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="kc">null</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;resources&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="kc">null</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;openapi&quot;</span><span class="p">:</span> <span class="s2">&quot;3.0.2&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;components&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;schemas&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;PostSchema&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">},</span>
+          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;readOnly&quot;</span><span class="p">:</span> <span class="kc">true</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;uuid&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;uuid&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;in&quot;</span><span class="p">:</span> <span class="s2">&quot;path&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;content&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;text/plain&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;required&quot;</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;responses&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Default Response&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;content&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;text/plain&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
