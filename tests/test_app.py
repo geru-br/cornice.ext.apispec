@@ -7,7 +7,7 @@ from cornice.service import clear_services
 from cornice.validators import colander_validator
 from flex.core import validate
 
-from .support import GetRequestSchema, PutRequestSchema, response_schemas
+from .support._marshmallow import GetRequestSchema, PutRequestSchema, response_schemas
 from cornice_apispec import CorniceSwagger
 
 

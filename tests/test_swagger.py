@@ -7,8 +7,7 @@ from flex.core import validate
 
 from cornice_apispec.swagger import CorniceSwagger, CorniceSwaggerException
 
-from .support import (GetRequestSchema, PutRequestSchema, response_schemas,
-                      BodySchema, HeaderSchema)
+from .support._marshmallow import GetRequestSchema, PutRequestSchema, response_schemas
 
 
 class CorniceSwaggerGeneratorTest(unittest.TestCase):
