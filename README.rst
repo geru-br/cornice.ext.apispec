@@ -22,7 +22,7 @@ WARNING: it is not working.
 .. |docs| image:: https://img.shields.io/badge/docs-gh--pages-ff69b4.svg
     :target: https://cornices.github.io/cornice.ext.swagger/
 
-This Project is based at `Cornice Swagger <https://github.com/Cornices/cornice.ext.swagger>`_
+This Project is based on `Cornice Swagger <https://github.com/Cornices/cornice.ext.swagger>`_
 
 *Cornice extension to generate OpenAPI/Swagger Specification*
 
