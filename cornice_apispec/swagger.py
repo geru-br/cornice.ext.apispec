@@ -17,33 +17,11 @@ class CorniceSwaggerException(Exception):
 class CorniceSwagger(object):
     """Handles the creation of a swagger document from a cornice application."""
 
+    spec = None
+
     services = []
     """List of cornice services to document. You may use
     `cornice.service.get_services()` to get it."""
-
-
-    custom_type_converters = {}
-    """Mapping for supporting custom types conversion on the default TypeConverter.
-    Should map `colander.TypeSchema` to `cornice_apispec.converters.schema.TypeConverter`
-    callables."""
-
-    default_type_converter = None
-    """Supplies a default type converter matching the interface of
-    `cornice_apispec.converters.schema.TypeConverter` to be used with unknown types."""
-
-    default_tags = None
-    """Provide a default list of tags or a callable that takes a cornice
-    service and the method name (e.g GET) and returns a list of Swagger
-    tags to be used if not provided by the view."""
-
-    default_op_ids = None
-    """Provide a callable that takes a cornice service and the method name
-    (e.g. GET) and returns an operation Id that is used if an operation Id is
-    not provided. Each operation Id should be unique."""
-
-    default_security = None
-    """Provide a default list or a callable that takes a cornice service and
-    the method name (e.g. GET) and returns a list of OpenAPI security policies."""
 
     summary_docstrings = False
     """Enable extracting operation summaries from view docstrings."""
@@ -134,7 +112,7 @@ class CorniceSwagger(object):
             plugins=[MarshmallowPlugin(), CornicePlugin()],
         )
 
-        for service in get_services():
+        for service in self.services:
 
             self.generate_schemas(service)
             self.generate_responses(service)
@@ -142,7 +120,7 @@ class CorniceSwagger(object):
 
             self.generate_tags(service)
 
-            self.spec.path(service=service)
+            self.spec.path(service=service, ignore_methods=self.ignore_methods)
 
         return self.spec.to_dict()
 
@@ -203,6 +181,3 @@ class CorniceSwagger(object):
                     self.spec.components.parameter(schema.__name__, 'path', service=service, schema=schema)
                 except DuplicateComponentNameError:
                     pass
-
-
-

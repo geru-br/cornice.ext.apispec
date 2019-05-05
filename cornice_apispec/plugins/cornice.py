@@ -6,16 +6,16 @@ from cornice_apispec.helpers import get_parameter_from_path, SchemasHelper, Resp
 
 class CornicePlugin(BasePlugin):
 
-    ignore_methods = ['HEAD', 'OPTIONS']
-
-    def path_helper(self, operations, service, **kwargs):
+    def path_helper(self, operations, service, ignore_methods=None,  **kwargs):
         """Path helper that parses docstrings for operations. Adds a
         ``func`` parameter to `apispec.APISpec.path`.
         """
 
+        ignore_methods = ignore_methods or ['HEAD', 'OPTIONS']
+
         for method, view, args in service.definitions:
 
-            if method.lower() in map(str.lower, self.ignore_methods):
+            if method.lower() in map(str.lower, ignore_methods):
                 continue
 
             new_operations = {method.lower(): {'description': service.description}}

@@ -1,5 +1,8 @@
 """Cornice Swagger 2.0 documentor helpers"""
 
+# TODO: Create a parameter helper and tags helper
+
+
 def get_parameter_from_path(path):
     path_components = path.split('/')
     param_names = [comp[1:-1] for comp in path_components
@@ -13,9 +16,15 @@ def get_parameter_from_path(path):
     return params
 
 
-class SchemasHelper(object):
+class Helper(object):
     def __init__(self, args):
         self.args = args
+
+
+class SchemasHelper(Helper):
+    """
+    Extract defined schema at service
+    """
 
     def _has_cornice_base_validator(self, validators):
         """
@@ -47,10 +56,11 @@ class SchemasHelper(object):
         return []
 
 
-class ResponseHelper(object):
+class ResponseHelper(Helper):
 
-    def __init__(self, args):
-        self.args = args
+    """
+    Extract response from service
+    """
 
     @property
     def responses(self):
