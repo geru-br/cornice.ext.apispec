@@ -32,8 +32,8 @@ cornice_enable_openapi_explorer directive
 Generator Internals
 ===================
 
-.. automethod:: cornice_apispec.swagger.helpers.SchemasHelper
-.. automethod:: cornice_apispec.swagger.helpers.ResponseHelper
+.. automethod:: cornice_apispec.helpers.SchemasHelper
+.. automethod:: cornice_apispec.helpers.ResponseHelper
 
 
 Section Plugins
