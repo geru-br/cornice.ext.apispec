@@ -8,7 +8,7 @@ Installing
 
 You may install us with pip::
 
-    $ pip install cornice_swagger
+    $ pip install cornice_apispec
 
 
 From an existing Cornice application, you may add this extension to your
@@ -19,13 +19,13 @@ Pyramid configurator after including cornice::
     def setup():
         config = Configurator()
         config.include('cornice')
-        config.include('cornice_swagger')
+        config.include('cornice_apispec')
 
 
 You can than create your OpenAPI/Swagger JSON using::
 
 
-    from cornice_swagger import CorniceSwagger
+    from cornice_apispec import CorniceSwagger
     from cornice.service import get_services
 
     my_generator = CorniceSwagger(get_services())
@@ -38,7 +38,7 @@ serve API explorer on your application::
 
     config = Configurator()
     config.include('cornice')
-    config.include('cornice_swagger')
+    config.include('cornice_apispec')
     config.cornice_enable_openapi_view(
         api_path='/api-explorer/swagger.json',
         title='MyAPI',
@@ -57,7 +57,7 @@ Using a scaffold
 
 If you want to start a new project, there is a cookiecutter scaffold that can be used::
 
-   $ cookiecutter https://github.com/delijati/cookiecutter-cornice_swagger.git
+   $ cookiecutter https://github.com/geru-br/cookiecutter-cornice-apispec.git
    $ cd demo
    $ pip install -e .
    $ cd demo/static
