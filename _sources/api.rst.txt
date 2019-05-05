@@ -7,34 +7,34 @@ may be overwritten by applications.
 Basic Generator
 ===============
 
-.. py:module:: cornice_swagger
+.. py:module:: cornice_apispec
 
-.. autoclass:: cornice_swagger.swagger.CorniceSwagger
+.. autoclass:: cornice_apispec.swagger.CorniceSwagger
     :members:
     :member-order: bysource
 
 cornice_enable_openapi_view directive
 =====================================
 
-.. py:module:: cornice_swagger
+.. py:module:: cornice_apispec
 
-.. autofunction:: cornice_swagger.cornice_enable_openapi_view
+.. autofunction:: cornice_apispec.cornice_enable_openapi_view
 
 
 cornice_enable_openapi_explorer directive
 =========================================
 
-.. py:module:: cornice_swagger
+.. py:module:: cornice_apispec
 
-.. autofunction:: cornice_swagger.cornice_enable_openapi_explorer
+.. autofunction:: cornice_apispec.cornice_enable_openapi_explorer
 
 
 Generator Internals
 ===================
 
-.. automethod:: cornice_swagger.swagger.CorniceSwagger._build_paths
-.. automethod:: cornice_swagger.swagger.CorniceSwagger._extract_path_from_service
-.. automethod:: cornice_swagger.swagger.CorniceSwagger._extract_operation_from_view
+.. automethod:: cornice_apispec.swagger.CorniceSwagger._build_paths
+.. automethod:: cornice_apispec.swagger.CorniceSwagger._extract_path_from_service
+.. automethod:: cornice_apispec.swagger.CorniceSwagger._extract_operation_from_view
 
 Section Handlers
 ================
@@ -43,29 +43,29 @@ Swagger definitions and parameters are handled in separate classes. You may over
 those if you want to change the converters behaviour.
 
 
-.. autoclass:: cornice_swagger.swagger.DefinitionHandler
-.. automethod:: cornice_swagger.swagger.DefinitionHandler.__init__
-.. automethod:: cornice_swagger.swagger.DefinitionHandler.from_schema
-.. automethod:: cornice_swagger.swagger.DefinitionHandler._ref_recursive
+.. autoclass:: cornice_apispec.swagger.DefinitionHandler
+.. automethod:: cornice_apispec.swagger.DefinitionHandler.__init__
+.. automethod:: cornice_apispec.swagger.DefinitionHandler.from_schema
+.. automethod:: cornice_apispec.swagger.DefinitionHandler._ref_recursive
 
-.. autoclass:: cornice_swagger.swagger.ParameterHandler
-.. automethod:: cornice_swagger.swagger.ParameterHandler.__init__
-.. automethod:: cornice_swagger.swagger.ParameterHandler.from_schema
-.. automethod:: cornice_swagger.swagger.ParameterHandler.from_path
-.. automethod:: cornice_swagger.swagger.ParameterHandler._ref
+.. autoclass:: cornice_apispec.swagger.ParameterHandler
+.. automethod:: cornice_apispec.swagger.ParameterHandler.__init__
+.. automethod:: cornice_apispec.swagger.ParameterHandler.from_schema
+.. automethod:: cornice_apispec.swagger.ParameterHandler.from_path
+.. automethod:: cornice_apispec.swagger.ParameterHandler._ref
 
-.. autoclass:: cornice_swagger.swagger.ResponseHandler
-.. automethod:: cornice_swagger.swagger.ResponseHandler.__init__
-.. automethod:: cornice_swagger.swagger.ResponseHandler.from_schema_mapping
-.. automethod:: cornice_swagger.swagger.ResponseHandler._ref
+.. autoclass:: cornice_apispec.swagger.ResponseHandler
+.. automethod:: cornice_apispec.swagger.ResponseHandler.__init__
+.. automethod:: cornice_apispec.swagger.ResponseHandler.from_schema_mapping
+.. automethod:: cornice_apispec.swagger.ResponseHandler._ref
 
 Colander converters
 ===================
 
-You may use the ``cornice_swagger.converters`` submodule to access the colander
+You may use the ``cornice_apispec.converters`` submodule to access the colander
 to swagger request and schema converters. These may be also used without
-``cornice_swagger`` generators.
+``cornice_apispec`` generators.
 
-.. automodule:: cornice_swagger.converters
-.. autofunction:: cornice_swagger.converters.convert_schema
-.. autofunction:: cornice_swagger.converters.convert_parameter
+.. automodule:: cornice_apispec.converters
+.. autofunction:: cornice_apispec.converters.convert_schema
+.. autofunction:: cornice_apispec.converters.convert_parameter

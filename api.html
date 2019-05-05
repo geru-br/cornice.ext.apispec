@@ -28,9 +28,9 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Full Tutorial</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Cornice Swagger API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-cornice_swagger">Basic Generator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cornice_swagger">cornice_enable_openapi_view directive</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cornice_swagger">cornice_enable_openapi_explorer directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cornice_apispec">Basic Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cornice_apispec">cornice_enable_openapi_view directive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cornice_apispec">cornice_enable_openapi_explorer directive</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#generator-internals">Generator Internals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#section-handlers">Section Handlers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#colander-converters">Colander converters</a></li>
@@ -62,14 +62,14 @@
 <h1>Cornice Swagger API<a class="headerlink" href="#cornice-swagger-api" title="Permalink to this headline">¶</a></h1>
 <p>Here you may find information about the Cornice Swagger internals and methods that
 may be overwritten by applications.</p>
-<div class="section" id="module-cornice_swagger">
-<span id="basic-generator"></span><h2>Basic Generator<a class="headerlink" href="#module-cornice_swagger" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cornice_apispec">
+<span id="basic-generator"></span><h2>Basic Generator<a class="headerlink" href="#module-cornice_apispec" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-cornice_swagger">
-<span id="cornice-enable-openapi-view-directive"></span><h2>cornice_enable_openapi_view directive<a class="headerlink" href="#module-cornice_swagger" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cornice_apispec">
+<span id="cornice-enable-openapi-view-directive"></span><h2>cornice_enable_openapi_view directive<a class="headerlink" href="#module-cornice_apispec" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-cornice_swagger">
-<span id="cornice-enable-openapi-explorer-directive"></span><h2>cornice_enable_openapi_explorer directive<a class="headerlink" href="#module-cornice_swagger" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cornice_apispec">
+<span id="cornice-enable-openapi-explorer-directive"></span><h2>cornice_enable_openapi_explorer directive<a class="headerlink" href="#module-cornice_apispec" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="generator-internals">
 <h2>Generator Internals<a class="headerlink" href="#generator-internals" title="Permalink to this headline">¶</a></h2>
@@ -81,9 +81,9 @@ those if you want to change the converters behaviour.</p>
 </div>
 <div class="section" id="colander-converters">
 <h2>Colander converters<a class="headerlink" href="#colander-converters" title="Permalink to this headline">¶</a></h2>
-<p>You may use the <code class="docutils literal notranslate"><span class="pre">cornice_swagger.converters</span></code> submodule to access the colander
+<p>You may use the <code class="docutils literal notranslate"><span class="pre">cornice_apispec.converters</span></code> submodule to access the colander
 to swagger request and schema converters. These may be also used without
-<code class="docutils literal notranslate"><span class="pre">cornice_swagger</span></code> generators.</p>
+<code class="docutils literal notranslate"><span class="pre">cornice_apispec</span></code> generators.</p>
 </div>
 </div>
 
