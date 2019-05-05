@@ -4,7 +4,7 @@ import webtest
 from pyramid import testing
 from cornice import Service
 from cornice.service import clear_services
-from cornice.validators import colander_validator
+from cornice.validators import marshmallow_validator
 from flex.core import validate
 
 from .support._marshmallow import GetRequestSchema, PutRequestSchema, response_schemas
@@ -20,14 +20,14 @@ class AppTest(unittest.TestCase):
     def setUp(self):
         service = Service('IceCream', '/icecream/{flavour}')
 
-        @service.get(validators=(colander_validator, ),
+        @service.get(validators=(marshmallow_validator, ),
                      schema=GetRequestSchema(),
                      response_schemas=response_schemas)
         def view_get(request):
             """Serve icecream"""
             return request.validated
 
-        @service.put(validators=(colander_validator, ), schema=PutRequestSchema())
+        @service.put(validators=(marshmallow_validator, ), schema=PutRequestSchema())
         def view_put(request):
             """Add flavour"""
             return request.validated
@@ -68,7 +68,7 @@ class AppSpecViewTest(unittest.TestCase):
     def setUp(self):
         service = Service('IceCream', '/icecream/{flavour}')
 
-        @service.get(validators=(colander_validator, ),
+        @service.get(validators=(marshmallow_validator, ),
                      schema=GetRequestSchema(),
                      response_schemas=response_schemas)
         def view_get(request):
@@ -100,7 +100,7 @@ class AppUIViewTest(unittest.TestCase):
     def setUp(self):
         service = Service('IceCream', '/icecream/{flavour}')
 
-        @service.get(validators=(colander_validator, ),
+        @service.get(validators=(marshmallow_validator, ),
                      schema=GetRequestSchema(),
                      response_schemas=response_schemas)
         def view_get(request):
@@ -160,23 +160,3 @@ class AppGoodRoutesTest(unittest.TestCase):
         spec = swagger.generate('IceCreamAPI', '4.2')
         self.assertIn('/ice_test/{flavour}', spec['paths'])
 
-
-class AppBadRoutesTest(unittest.TestCase):
-
-    def tearDown(self):
-        clear_services()
-        testing.tearDown()
-
-    def setUp(self):
-        service = Service('Ice Route', pyramid_route='ice_testXXX')
-        self.config = testing.setUp()
-        self.config.include('cornice')
-        self.config.include('cornice_apispec')
-        self.config.add_cornice_service(service)
-        self.services = [service]
-        self.app = webtest.TestApp(self.config.make_wsgi_app())
-
-    def test_route(self):
-        with self.assertRaises(ValueError):
-            swagger = CorniceSwagger(self.services)
-            swagger.generate('IceCreamAPI', '4.2')

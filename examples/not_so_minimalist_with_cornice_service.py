@@ -23,10 +23,15 @@ class SaleSchema(Schema):
     quantity = fields.Decimal()
 
 
+response_schemas = {200: CustomerSchema}
+response_product_schemas = {200: ProductSchema}
+response_sales_schemas = {200: SaleSchema}
+
+
 customers = Service(name='customers', path='/api/v1/customers/{uuid}', tags=[{'customers': 'Hello World'}], description='Customers')
 
 
-@customers.post(schema=CustomerSchema, validators=(marshmallow_body_validator,), response_schemas=CustomerSchema)
+@customers.post(schema=CustomerSchema, validators=(marshmallow_body_validator,), response_schemas=response_schemas)
 def _customer_post(request):
     """
     :param request:
@@ -60,7 +65,7 @@ def _products_post(request):
 products_get = Service(name='products_get', path='/api/v1/products/{uuid}', tags=['products'])
 
 
-@products_get.get(response_schemas=ProductSchema)
+@products_get.get(response_schemas=response_product_schemas)
 def _products_get(request):
     return request.matchdict['uuid']
 
@@ -81,7 +86,7 @@ def _sale_post(request):
 sale_get = Service(name='sale_get', path='/api/v1/sales/{uuid}', tags=['sales'])
 
 
-@sale_get.get(response_schemas=ProductSchema)
+@sale_get.get(response_schemas=response_sales_schemas)
 def _sale_get(request):
     return request.matchdict['uuid']
 

@@ -4,9 +4,8 @@ from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec.exceptions import DuplicateComponentNameError
 
-from cornice.service import get_services
-
-from cornice_apispec.helpers import get_parameter_from_path, SchemasHelper, ResponseHelper
+from cornice_apispec.helpers import get_parameter_from_path, SchemasHelper, ResponseHelper, PathHelper
+from cornice_apispec.utils import get_schema_name
 from cornice_apispec.plugins.cornice import CornicePlugin
 
 
@@ -117,17 +116,24 @@ class CorniceSwagger(object):
             self.generate_schemas(service)
             self.generate_responses(service)
             self.generate_parameters(service)
-
             self.generate_tags(service)
-
-            self.spec.path(service=service, ignore_methods=self.ignore_methods)
+            self.generate_paths(service)
 
         return self.spec.to_dict()
+
+    def generate_paths(self, service):
+
+        for method, view, args in service.definitions:
+            helper = PathHelper(service, args, pyramid_registry=self.pyramid_registry)
+            try:
+                self.spec.path(service=service, path=helper.path, ignore_methods=self.ignore_methods)
+            except DuplicateComponentNameError:
+                pass
 
     def generate_responses(self, service):
 
         for method, view, args in service.definitions:
-            for component_id, status_code, schema in ResponseHelper(args).responses:
+            for component_id, status_code, schema in ResponseHelper(service, args).responses:
                 try:
                     self.spec.components.response(component_id, service=service, schema=schema, status_code=status_code)
                 except DuplicateComponentNameError:
@@ -137,7 +143,7 @@ class CorniceSwagger(object):
 
         for method, view, args in service.definitions:
 
-            helper = SchemasHelper(args)
+            helper = SchemasHelper(service, args)
 
             schemas = list([helper.body, helper.path])
 
@@ -146,7 +152,7 @@ class CorniceSwagger(object):
             for schema in [schema for schema in schemas if schema]:
 
                 try:
-                    self.spec.components.schema(schema.__name__, schema=schema)
+                    self.spec.components.schema(get_schema_name(schema), schema=schema)
                 except DuplicateComponentNameError:
                     pass
 
@@ -167,17 +173,19 @@ class CorniceSwagger(object):
             if method.lower() in map(str.lower, self.ignore_methods):
                 continue
 
-            for parameter in get_parameter_from_path(service.path):
-                try:
-                    self.spec.components.parameter(parameter, 'path', service=service)
-                except DuplicateComponentNameError:
-                    pass
+            if service.path:
 
-            schemas = list([SchemasHelper(args).path])
+                for parameter in get_parameter_from_path(service.path):
+                    try:
+                        self.spec.components.parameter(parameter, 'path', service=service)
+                    except DuplicateComponentNameError:
+                        pass
+
+            schemas = list([SchemasHelper(service, args).path])
 
             for schema in [schema for schema in schemas if schema]:
 
                 try:
-                    self.spec.components.parameter(schema.__name__, 'path', service=service, schema=schema)
+                    self.spec.components.parameter(get_schema_name(schema), 'path', service=service, schema=schema)
                 except DuplicateComponentNameError:
                     pass
