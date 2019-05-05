@@ -10,8 +10,8 @@ class PostSchema(Schema):
     title = fields.Str()
 
 
-requests_post = Service(name='resources_post', path='/api/v1/resource', tags=['resources'])
-requests_get = Service(name='resource_get', path='/api/v1/resource/{uuid}', tags=['resources'])
+requests_post = Service(name='resources_post', path='/api/v1/resource', tags=['resources'], description='Request')
+requests_get = Service(name='resource_get', path='/api/v1/resource/{uuid}', tags=['resources'], description='Request')
 
 
 response_schemas = {200: PostSchema}
@@ -24,8 +24,7 @@ def _requests_post(request):
     :param request:
     :return:
     """
-    uuid = request.validated['uuid']
-    return uuid
+    return PostSchema().dump({'title': request.validated['title']})
 
 
 @requests_get.get(response_schemas=response_schemas)

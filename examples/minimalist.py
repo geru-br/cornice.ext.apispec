@@ -21,8 +21,7 @@ def _requests_post(request):
     :param request:
     :return:
     """
-    uuid = request.validated['uuid']
-    return uuid
+    return {'title': request.validated['title']}
 
 
 @requests_get.get()

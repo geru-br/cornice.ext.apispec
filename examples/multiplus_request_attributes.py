@@ -5,6 +5,11 @@ from wsgiref.simple_server import make_server
 from pyramid.config import Configurator
 
 
+class Path(Schema):
+    path = fields.String()
+    http_schema = fields.String()
+
+
 class Querystring(Schema):
     referrer = fields.String()
 
@@ -18,15 +23,16 @@ class Payload(Schema):
 class SignupSchema(Schema):
     body = fields.Nested(Payload)
     querystring = fields.Nested(Querystring)
+    path = fields.Nested(Path)
 
 
-signup = Service(name='signup', path='/api/v1/signup', tags=['signup'])
+signup = Service(name='signup', path='/api/v1/signup', tags=['signup'], description='Signup Service')
 
 
 @signup.post(schema=SignupSchema, validators=(marshmallow_validator,))
 def signup_post(request):
     username = request.validated['body']['username']
-    referrer = request.validated['querystring']['referrer']
+    referrer = request.validated['querystring']
     return {'success': True}
 
 
