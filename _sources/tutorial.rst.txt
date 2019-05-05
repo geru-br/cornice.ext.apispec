@@ -21,7 +21,7 @@ your Pyramid config. For that you may use:
     def setup():
         config = Configurator()
         config.include('cornice')
-        config.include('cornice_swagger')
+        config.include('cornice_apispec')
         config.cornice_enable_openapi_view(
             title='MyAPI',
             description="OpenAPI documentation",

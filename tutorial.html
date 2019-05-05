@@ -75,7 +75,7 @@ your Pyramid config. For that you may use:</p>
 <span class="k">def</span> <span class="nf">setup</span><span class="p">():</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">Configurator</span><span class="p">()</span>
     <span class="n">config</span><span class="o">.</span><span class="n">include</span><span class="p">(</span><span class="s1">&#39;cornice&#39;</span><span class="p">)</span>
-    <span class="n">config</span><span class="o">.</span><span class="n">include</span><span class="p">(</span><span class="s1">&#39;cornice_swagger&#39;</span><span class="p">)</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">include</span><span class="p">(</span><span class="s1">&#39;cornice_apispec&#39;</span><span class="p">)</span>
     <span class="n">config</span><span class="o">.</span><span class="n">cornice_enable_openapi_view</span><span class="p">(</span>
         <span class="n">title</span><span class="o">=</span><span class="s1">&#39;MyAPI&#39;</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;OpenAPI documentation&quot;</span><span class="p">,</span>
