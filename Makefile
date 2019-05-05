@@ -9,7 +9,7 @@ SPHINXBUILDDIR   = docs/build
 SPHINXSOURCEDIR  = docs/source
 
 ALLSPHINXOPTS    = -d $(SPHINXBUILDDIR)/doctrees $(SPHINXOPTS) $(SPHINXSOURCEDIR)
-SPHINXBUILDFILES = docs Makefile examples cornice_swagger CHANGES.rst CONTRIBUTORS.rst
+SPHINXBUILDFILES = docs Makefile examples cornice_apispec CHANGES.rst CONTRIBUTORS.rst
 
 
 .PHONY: help clean docs docs-pub docs-pack
