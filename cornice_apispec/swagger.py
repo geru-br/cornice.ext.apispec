@@ -54,7 +54,6 @@ class CornicePlugin(BasePlugin):
             if parameter_schema:
                 parameters[parameter_schema] = parameter_schema
 
-
             new_operations[method.lower()].update({'parameters': parameters})
 
             for component_id, status_code, schema in ResponseHelper(args).responses:
@@ -88,8 +87,6 @@ class CornicePlugin(BasePlugin):
         else:
             return {'description': 'Default Response',
                     'content': {'text/plain': {'schema': {'type': 'string'}}}}
-
-
 
 
 def get_parameter_from_path(path):
