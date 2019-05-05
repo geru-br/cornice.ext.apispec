@@ -12,7 +12,7 @@ extensions = ['sphinx.ext.autodoc']
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-project = u'Cornice Swagger'
+project = u'Cornice APISpec'
 copyright = u'2016-2017, Josip Delic'
 
 version = '0.3'
