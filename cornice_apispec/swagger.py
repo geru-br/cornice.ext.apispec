@@ -24,6 +24,8 @@ class CornicePlugin(BasePlugin):
             if method.lower() in map(str.lower, self.ignore_methods):
                 continue
 
+            new_operations = {method.lower(): {'description': service.description}}
+
             tags = []
 
             if hasattr(service, 'tags') and isinstance(service.tags, list):
@@ -33,20 +35,26 @@ class CornicePlugin(BasePlugin):
                     else:
                         tags.append(tag)
 
-            schema = args.get('schema', None)
-            if schema:
+            if tags:
+                new_operations[method.lower()].update({'tags': tags})
 
-                operations.update({method.lower():
-                                       {'description': service.description,
-                                        'tags': tags,
-                                        'requestBody': {'content': {'application/json': {'schema': schema.__name__}}},
-                                        'responses': {200: '200_' + schema.__name__}}})
-            else:
-                operations.update({method.lower():
-                                       {'description': service.description,
-                                        'tags': tags,
-                                        'parameters': {'uuid': 'uuid'},
-                                        'responses': {200: {'content': {'application/json': 'lala'}}}}})
+            schema = None if not Schemas(args).body else Schemas(args).body.__name__
+
+            if schema:
+                new_operations[method.lower()].update(
+                    {'requestBody': {'content': {'application/json': {'schema': schema}}}}
+                )
+
+            parameters = {}
+            for parameter in get_parameter_from_path(service.path):
+                parameters[parameter] = parameter
+
+            new_operations[method.lower()].update({'parameters': parameters})
+
+            if None and schema:
+                new_operations[method.lower()].update({'responses': {200: '200_' + schema}})
+
+            operations.update(new_operations)
 
         return service.path
 
@@ -75,6 +83,41 @@ def get_parameter_from_path(path):
         params.append(name)
 
     return params
+
+
+class Schemas(object):
+    def __init__(self, args):
+        self.args = args
+
+    def _has_cornice_base_validator(self, validators):
+        """
+        Cornice has a special validator that expect a especial schema with subsructure
+        """
+        # TODO: Add colander validator
+        for validator in validators:
+            if validator.__module__ in ['cornice.validators._marshmallow'] and validator.__name__ == 'validator':
+                return True
+
+        return False
+
+    @property
+    def body(self):
+        if self._has_cornice_base_validator(self.args.get('validators', [])):
+            return self.args.get('schema')().fields['body'].schema.__class__
+        else:
+            return self.args.get('schema', None)
+
+    def querystring(self):
+        return []
+
+    def path(self):
+        return []
+
+    def headers(self):
+        return []
+
+
+
 
 
 
@@ -228,12 +271,12 @@ class CorniceSwagger(object):
 
         for method, view, args in service.definitions:
 
-            schemas = list()
-            schemas.append(args.get('schema', None))
+            schemas = list([Schemas(args).body])
 
             schemas.extend(args.get('responses_schema', []))
 
             for schema in [schema for schema in schemas if schema]:
+
                 try:
                     self.spec.components.schema(schema.__name__, schema=schema)
                 except DuplicateComponentNameError:
