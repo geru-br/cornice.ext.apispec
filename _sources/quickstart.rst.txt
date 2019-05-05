@@ -55,14 +55,7 @@ http://localhost:8000/api-explorer (in the example above)
 Using a scaffold
 ================
 
-If you want to start a new project, there is a cookiecutter scaffold that can be used::
-
-   $ cookiecutter https://github.com/geru-br/cookiecutter-cornice-apispec.git
-   $ cd demo
-   $ pip install -e .
-   $ cd demo/static
-   $ bower install
-
+TODO: Build a cookiecutter
 
 
 Show me a minimalist useful example
