@@ -1,8 +1,8 @@
 from cornice_apispec.swagger import CorniceSwagger
 from pyramid.security import NO_PERMISSION_REQUIRED
 
-__author__ = """Josip Delic"""
-__email__ = 'delicj@delijati.net'
+__author__ = """Tomas Correa"""
+__email__ = 'tomas.correa@gmail.com'
 __version__ = '0.3.0'
 
 
