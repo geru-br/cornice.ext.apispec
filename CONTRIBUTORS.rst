@@ -1,7 +1,4 @@
-Alphabetically-ordered List of the people who contributed to Cornice Swagger:
+Alphabetically-ordered List of the people who contributed to Cornice apispec:
 
-- Gabriela Surita <gsurita@mozilla.com>
-- Jason Haury
-- Josip Delic
-- Marcin Lulek
-- Simone Marzola <marzolasimone@gmail.com>
+- Tomas Silveira Corrêa <tomas.correa@gmail.com>
+

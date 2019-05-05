@@ -19,6 +19,7 @@ Cornice apipec
 .. |docs| image:: https://img.shields.io/badge/docs-gh--pages-ff69b4.svg
     :target: https://cornices.github.io/cornice.ext.swagger/
 
+This Project is based at `Cornice Swagger <https://github.com/Cornices/cornice.ext.swagger>`_
 
 *Cornice extension to generate OpenAPI/Swagger Specification*
 
@@ -31,6 +32,6 @@ while allowing users to override some parts of the generated document.
 
 * `Documentation <https://geru-br.github.io/cornice.ext.apispec/>`_
 * `Tutorial <https://geru-br.github.io/cornice.ext.apispec/tutorial.html>`_
-* `Issue tracker <https://github.com/Cornices/cornice.ext.apispec/issues>`_
+* `Issue tracker <https://github.com/geru-br/cornice.ext.apispec/issues>`_
 
 
