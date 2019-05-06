@@ -1,13 +1,14 @@
 import unittest
 import mock
 
-from cornice.validators import colander_validator, colander_body_validator
+from cornice.validators import marshmallow_validator, marshmallow_body_validator
 from cornice.service import Service
 from flex.core import validate
 
-from cornice_apispec.swagger import CorniceSwagger, CorniceSwaggerException
+from cornice_apispec.swagger import CorniceSwagger
+from cornice_apispec.exceptions import CorniceSwaggerException
 
-from .support._marshmallow import GetRequestSchema, PutRequestSchema, response_schemas
+from .support._marshmallow import GetRequestSchema, PutRequestSchema, HeaderSchema, BodySchema, response_schemas
 
 
 class CorniceSwaggerGeneratorTest(unittest.TestCase):
@@ -16,14 +17,14 @@ class CorniceSwaggerGeneratorTest(unittest.TestCase):
         service = Service("IceCream", "/icecream/{flavour}")
 
         class IceCream(object):
-            @service.get(validators=(colander_validator, ),
+            @service.get(validators=(marshmallow_validator, ),
                          schema=GetRequestSchema(),
                          response_schemas=response_schemas)
             def view_get(self, request):
                 """Serve ice cream"""
                 return self.request.validated
 
-            @service.put(validators=(colander_validator, ), schema=PutRequestSchema())
+            @service.put(validators=(marshmallow_validator, ), schema=PutRequestSchema())
             def view_put(self, request):
                 """Add flavour"""
                 return self.request.validated
@@ -74,43 +75,19 @@ class CorniceSwaggerGeneratorTest(unittest.TestCase):
         swagger = CorniceSwagger([self.service], def_ref_depth=1)
         spec = swagger.generate()
         validate(spec)
-        self.assertIn('definitions', spec)
+        self.assertIn('components', spec)
 
     def test_with_param_ref(self):
         swagger = CorniceSwagger([self.service], param_ref=True)
         spec = swagger.generate()
         validate(spec)
-        self.assertIn('parameters', spec)
+        self.assertIn('parameters', spec['components'])
 
     def test_with_resp_ref(self):
         swagger = CorniceSwagger([self.service], resp_ref=True)
         spec = swagger.generate()
         validate(spec)
-        self.assertIn('responses', spec)
-
-    def test_swagger_field_updates_extracted_paths(self):
-        self.swagger.swagger = {
-            'definitions': {'OtherDef': {'additionalProperties': {}}}
-        }
-        spec = self.swagger.generate()
-        validate(spec)
-        self.assertEquals(spec['definitions'], self.swagger.swagger['definitions'])
-
-    def test_swagger_field_overrides_extracted_paths(self):
-        swagger = CorniceSwagger([self.service], param_ref=True)
-        swagger.swagger = {
-            'parameters': {'BodySchema': {'required': False}}
-        }
-        spec = swagger.generate()
-        validate(self.spec)
-        expected = {'name': 'BodySchema', 'required': False}
-        self.assertDictContainsSubset(expected, spec['parameters']['BodySchema'])
-
-    @mock.patch('cornice_apispec.swagger.warnings.warn')
-    def test_swagger_call_is_deprecated(self, mocked):
-        self.swagger()
-        msg = "Calling `CorniceSwagger is deprecated, call `generate` instead"
-        mocked.assert_called_with(msg, DeprecationWarning)
+        self.assertIn('responses', spec['components'])
 
 
 class ExtractContentTypesTest(unittest.TestCase):
@@ -188,13 +165,13 @@ class ExtractContentTypesTest(unittest.TestCase):
         service = Service("IceCream", "/icecream/{flavour}")
 
         class IceCream(object):
-            @service.put(content_type=('application/json', 'text/xml'))
+            @service.put(schema=BodySchema, content_type=('application/json', 'text/xml'))
             def view_put(self, request):
                 return self.request.validated
 
         swagger = CorniceSwagger([service])
         spec = swagger.generate()
-        self.assertEquals(spec['paths']['/icecream/{flavour}']['put']['consumes'],
+        self.assertEquals([k for k in spec['paths']['/icecream/{flavour}']['put']['requestBody']['content'].keys()],
                           ['application/json', 'text/xml'])
 
     def test_single_ctype_callable(self):
@@ -251,14 +228,14 @@ class ExtractContentTypesTest(unittest.TestCase):
         service.add_view(
             "put",
             IceCream.view_put,
-            validators=(colander_validator, ),
+            validators=(marshmallow_validator, ),
             schema=PutRequestSchema(),
             content_type='application/json',
         )
         service.add_view(
             "put",
             IceCream.view_put,
-            validators=(colander_validator, ),
+            validators=(marshmallow_validator, ),
             schema=PutRequestSchema(),
             content_type='text/xml',
         )
@@ -280,14 +257,14 @@ class ExtractContentTypesTest(unittest.TestCase):
         service.add_view(
             "put",
             IceCream.view_put,
-            validators=(colander_validator, ),
+            validators=(marshmallow_validator, ),
             schema=PutRequestSchema(),
             content_type='application/json',
         )
         service.add_view(
             "put",
             IceCream.view_put,
-            validators=(colander_validator, ),
+            validators=(marshmallow_validator, ),
             schema=PutRequestSchema(),
             content_type='text/xml',
         )
@@ -315,41 +292,6 @@ class ExtractPathTest(unittest.TestCase):
             'in': 'path'
         }
         self.assertDictEqual(spec['paths']['/icecream/{subpath}']['parameters'][0], expected)
-
-
-class ExtractTransformSchemaTest(unittest.TestCase):
-    def setUp(self):
-        self.service = Service("IceCream", "/icecream/{flavour}")
-
-    def test_colander_body_validator_to_full_schema(self):
-        swagger = CorniceSwagger([self.service])
-        service_args = dict(
-            schema=BodySchema(),
-            validators=(colander_body_validator,)
-        )
-        full_schema = swagger._extract_transform_colander_schema(service_args)
-        # ensure schema is cloned
-        self.assertNotEqual(service_args['schema'], full_schema['body'])
-        # ensure schema is transformed
-        self.assertEqual(service_args['schema'].typ, full_schema['body'].typ)
-        self.assertEqual(len(service_args['schema'].children), len(full_schema['body'].children))
-
-    def test_schema_transform(self):
-        swagger = CorniceSwagger([self.service])
-        header_schema = HeaderSchema()
-        service_args = dict(
-            schema=GetRequestSchema()
-        )
-
-        def add_headers_transform(schema, args):
-            schema['header'] = header_schema
-            return schema
-
-        swagger.schema_transformers.append(add_headers_transform)
-        full_schema = swagger._extract_transform_colander_schema(service_args)
-        self.assertEqual(header_schema, full_schema['header'])
-        # ensure service schema is left untouched
-        self.assertNotIn('header', service_args['schema'])
 
 
 class ExtractTagsTest(unittest.TestCase):
@@ -398,58 +340,6 @@ class ExtractTagsTest(unittest.TestCase):
         validate(spec)
         tags = spec['paths']['/icecream/{flavour}']['get']['tags']
         self.assertEquals(tags, ['yum', 'cold', 'foo'])
-
-    def test_listed_default_tags(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        class IceCream(object):
-            @service.get()
-            def view_get(self, request):
-                return service
-
-        swagger = CorniceSwagger([service])
-        swagger.default_tags = ['cold']
-        spec = swagger.generate()
-        validate(spec)
-        tags = spec['paths']['/icecream/{flavour}']['get']['tags']
-        self.assertEquals(tags, ['cold'])
-
-    def test_callable_default_tags(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        class IceCream(object):
-            @service.get()
-            def view_get(self, request):
-                return service
-
-        def default_tag_callable(service, method):
-            return ['cold']
-
-        swagger = CorniceSwagger([service])
-        swagger.default_tags = default_tag_callable
-        spec = swagger.generate()
-        validate(spec)
-        tags = spec['paths']['/icecream/{flavour}']['get']['tags']
-        self.assertEquals(tags, ['cold'])
-
-    def test_provided_tags_override_sorting(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        class IceCream(object):
-            @service.get(tags=['cold', 'foo'])
-            def view_get(self, request):
-                return service
-
-        swagger = CorniceSwagger([service])
-        tags = [{'name': 'foo', 'description': 'bar'}]
-        swagger.swagger = {'tags': tags}
-        spec = swagger.generate()
-        validate(spec)
-        self.assertListEqual([{'name': 'foo', 'description': 'bar'},
-                              {'name': 'cold'}], spec['tags'])
 
     def test_invalid_view_tag_raises_exception(self):
 
@@ -529,86 +419,6 @@ class ExtractOperationIdTest(unittest.TestCase):
         self.assertRaises(CorniceSwaggerException, swagger.generate)
 
 
-class ExtractSecurityTest(unittest.TestCase):
-
-    def test_view_defined_security(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        @service.get(api_security=[{'basicAuth': []}])
-        def view_get(self, request):
-            return service
-
-        swagger = CorniceSwagger([service])
-        swagger.swagger = {'securityDefinitions': {'basicAuth': {'type': 'basic'}}}
-        spec = swagger.generate()
-        validate(spec)
-        security = spec['paths']['/icecream/{flavour}']['get']['security']
-        self.assertEquals(security, [{'basicAuth': []}])
-
-    def test_listed_default_security(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        @service.get()
-        def view_get(self, request):
-            return service
-
-        swagger = CorniceSwagger([service])
-        swagger.swagger = {'securityDefinitions': {'basicAuth': {'type': 'basic'}}}
-        swagger.default_security = [{'basicAuth': []}]
-        spec = swagger.generate()
-        validate(spec)
-        security = spec['paths']['/icecream/{flavour}']['get']['security']
-        self.assertEquals(security, [{'basicAuth': []}])
-
-    def test_callable_default_security(self):
-
-        def get_security(service, method):
-            definitions = service.definitions
-            for definition in definitions:
-                met, view, args = definition
-                if met == method:
-                    break
-
-            if 'security' in args:
-                return [{'basicAuth': []}]
-            else:
-                return []
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        @service.get()
-        def view_get(self, request):
-            return service
-
-        @service.post(security='foo')
-        def view_post(self, request):
-            return service
-
-        swagger = CorniceSwagger([service])
-        swagger.swagger = {'securityDefinitions': {'basicAuth': {'type': 'basic'}}}
-        swagger.default_security = get_security
-        spec = swagger.generate()
-        validate(spec)
-        security = spec['paths']['/icecream/{flavour}']['post']['security']
-        self.assertEquals(security, [{'basicAuth': []}])
-        security = spec['paths']['/icecream/{flavour}']['get']['security']
-        self.assertEquals(security, [])
-
-    def test_invalid_security_raises_exception(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        class IceCream(object):
-            @service.get(api_security='basicAuth')
-            def view_get(self, request):
-                return service
-
-        swagger = CorniceSwagger([service])
-        self.assertRaises(CorniceSwaggerException, swagger.generate)
-
-
 class NotInstantiatedSchemaTest(unittest.TestCase):
 
     def test_not_instantiated(self):
@@ -620,13 +430,13 @@ class NotInstantiatedSchemaTest(unittest.TestCase):
             """
 
             # Use GetRequestSchema and ResponseSchemas classes instead of objects
-            @service.get(validators=(colander_validator, ),
+            @service.get(validators=(marshmallow_validator, ),
                          schema=GetRequestSchema)
             def view_get(self, request):
                 """Serve icecream"""
                 return self.request.validated
 
-            @service.put(validators=(colander_validator, ), schema=PutRequestSchema())
+            @service.put(validators=(marshmallow_validator, ), schema=PutRequestSchema())
             def view_put(self, request):
                 """Add flavour"""
                 return self.request.validated

@@ -1,12 +1,12 @@
 from apispec import BasePlugin
 from apispec.utils import build_reference
 
-from cornice_apispec.helpers import get_parameter_from_path, SchemasHelper, ResponseHelper
-from cornice_apispec.utils import get_schema_name
+from cornice_apispec.helpers import get_parameter_from_path, SchemasHelper, ResponseHelper, TagsHelper
+from cornice_apispec.utils import get_schema_name, remove_duplicates
 
 class CornicePlugin(BasePlugin):
 
-    def path_helper(self, operations, path, service, ignore_methods=None,  **kwargs):
+    def path_helper(self, operations, path, service, ignore_methods=None, default_op_ids=None, **kwargs):
         """Path helper that parses docstrings for operations. Adds a
         ``func`` parameter to `apispec.APISpec.path`.
         """
@@ -20,23 +20,31 @@ class CornicePlugin(BasePlugin):
 
             new_operations = {method.lower(): {'description': service.description}}
 
-            tags = []
+            if view.__doc__:
+                new_operations[method.lower()].update({'summary': view.__doc__})
 
-            if hasattr(service, 'tags') and isinstance(service.tags, list):
-                for tag in service.tags:
-                    if isinstance(tag, dict):
-                        tags.extend(tag.keys())
-                    else:
-                        tags.append(tag)
+            if 'operation_id' in args:
+                new_operations[method.lower()].update({'operationId': args['operation_id']})
+
+            elif default_op_ids is not None:
+                new_operations[method.lower()].update({'operationId': default_op_ids(service, method)})
+
+            tags = TagsHelper(service, args).names
 
             if tags:
-                new_operations[method.lower()].update({'tags': tags})
+                new_operations[method.lower()].update({'tags': remove_duplicates(tags)})
 
             schema = None if not SchemasHelper(service, args).body else get_schema_name(SchemasHelper(service, args).body)
 
             if schema:
+
+                contents = {}
+
+                for content_type in args.get('content_type', ('application/json',)):
+                    contents[content_type] = {'schema': schema}
+
                 new_operations[method.lower()].update(
-                    {'requestBody': {'content': {'application/json': {'schema': schema}}}}
+                    {'requestBody': {'content': contents}}
                 )
 
             parameters = {}

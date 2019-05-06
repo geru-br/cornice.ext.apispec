@@ -28,7 +28,8 @@ response_product_schemas = {200: ProductSchema}
 response_sales_schemas = {200: SaleSchema}
 
 
-customers = Service(name='customers', path='/api/v1/customers/{uuid}', tags=[{'customers': 'Hello World'}], description='Customers')
+customers = Service(name='customers', path='/api/v1/customers/{uuid}', tags=[{'customers': 'Hello World'}],
+                    description='Customers')
 
 
 @customers.post(schema=CustomerSchema, validators=(marshmallow_body_validator,), response_schemas=response_schemas)

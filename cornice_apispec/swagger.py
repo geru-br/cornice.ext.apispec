@@ -4,19 +4,21 @@ from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec.exceptions import DuplicateComponentNameError
 
-from cornice_apispec.helpers import get_parameter_from_path, SchemasHelper, ResponseHelper, PathHelper
+from cornice_apispec.exceptions import CorniceSwaggerException
+from cornice_apispec.helpers import get_parameter_from_path, SchemasHelper, ResponseHelper, PathHelper, TagsHelper
 from cornice_apispec.utils import get_schema_name
 from cornice_apispec.plugins.cornice import CornicePlugin
-
-
-class CorniceSwaggerException(Exception):
-    """Raised when cornice services have structural problems to be converted."""
 
 
 class CorniceSwagger(object):
     """Handles the creation of a swagger document from a cornice application."""
 
     spec = None
+
+    default_op_ids = None
+    """Provide a callable that takes a cornice service and the method name
+    (e.g. GET) and returns an operation Id that is used if an operation Id is
+    not provided. Each operation Id should be unique."""
 
     services = []
     """List of cornice services to document. You may use
@@ -97,6 +99,10 @@ class CorniceSwagger(object):
         :returns: Full OpenAPI/Swagger compliant specification for the application.
         """
 
+        if self.default_op_ids and not callable(self.default_op_ids):
+            raise CorniceSwaggerException
+
+
         title = title or self.api_title
         version = version or self.api_version
         info = info or self.swagger.get('info', {})
@@ -126,7 +132,12 @@ class CorniceSwagger(object):
         for method, view, args in service.definitions:
             helper = PathHelper(service, args, pyramid_registry=self.pyramid_registry)
             try:
-                self.spec.path(service=service, path=helper.path, ignore_methods=self.ignore_methods)
+                self.spec.path(
+                    service=service,
+                    path=helper.path,
+                    ignore_methods=self.ignore_methods,
+                    default_op_ids=self.default_op_ids
+                )
             except DuplicateComponentNameError:
                 pass
 
@@ -158,13 +169,11 @@ class CorniceSwagger(object):
 
     def generate_tags(self, service):
 
-        if hasattr(service, 'tags'):
-            for tag in service.tags:
-                if isinstance(tag, dict):
-                    for key, value in tag.items():
-                        self.spec.tag({'name': key, 'description': value or key})
-                else:
-                    self.spec.tag({'name': tag, 'description': service.description})
+        for method, view, args in service.definitions:
+
+            for tag in TagsHelper(service, args).tags:
+
+                self.spec.tag(tag)
 
     def generate_parameters(self, service):
 

@@ -2,6 +2,7 @@
 
 from pyramid.threadlocal import get_current_registry
 from cornice_apispec.utils import get_schema_name, get_schema_cls
+from cornice_apispec.exceptions import CorniceSwaggerException
 
 
 def get_parameter_from_path(path):
@@ -68,8 +69,6 @@ class PathHelper(Helper):
         return self._extract_path_from_service()
 
 
-
-
 class SchemasHelper(Helper):
     """
     Extract defined schema at service
@@ -126,9 +125,67 @@ class ResponseHelper(Helper):
     def responses(self):
         ret = []
         for status_code, schema in self.args.get('response_schemas', {}).items():
-            component_id = '{}_{}'.format(status_code, get_schema_name(schema))
+            component_id = get_schema_name(schema)
             ret.append((component_id, status_code, schema,))
         else:
             ret.append(('default', 200, None,))
 
         return ret
+
+
+class TagsHelper(Helper):
+
+    @property
+    def tags(self):
+        _tags = []
+
+        if hasattr(self.service, 'tags'):
+            if isinstance(self.service.tags, list):
+                for tag in self.service.tags:
+                    if isinstance(tag, dict):
+
+                        if 'name' in tag.keys() and 'description' in tag.keys():
+                            _tags.append(tag)
+                        else:
+                            name = [k for k in tag.items()][0][0]
+                            description = [k for k in tag.items()][0][0]
+                            _tags.append({'name': name, 'description': description})
+                    else:
+                        _tags.append({'name': tag, 'description': tag})
+            else:
+                raise CorniceSwaggerException('Tags must be list, not {}'.format(self.service.tags))
+
+        if 'tags' in self.args:
+            if isinstance(self.args['tags'], list):
+                for tag in self.args['tags']:
+                    if isinstance(tag, dict):
+                        if 'name' in tag.keys() and 'description' in tag.keys():
+                            _tags.append(tag)
+                        else:
+                            name = [k for k in tag.items()][0][0]
+                            description = [k for k in tag.items()][0][0]
+                            _tags.append({'name': name, 'description': description})
+                    else:
+                        _tags.append({'name': tag, 'description': tag})
+            else:
+                raise CorniceSwaggerException('Tags must be list, not {}'.format(self.args['tags']))
+
+        clean_tags = []
+
+        for tag in _tags:
+            if tag.get('name') not in [t.get('name') for t in clean_tags]:
+                clean_tags.append(tag)
+
+        return clean_tags
+
+    @property
+    def names(self):
+
+        names = []
+        for tag in self.tags:
+            if isinstance(tag, dict):
+                names.append(tag['name'])
+            else:
+                names.append(tag)
+
+        return names
