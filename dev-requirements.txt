@@ -28,3 +28,4 @@ validate-email
 virtualenv
 waitress
 WebTest
+marshmallow
