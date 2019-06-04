@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  deploy:
+    docker:
+      - image: python:3.6
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: publish to geru-pypi
+          command: |
+            python setup.py sdist
+            pip install twine
+            twine upload --repository-url https://geru-pypi.geru.com.br/ dist/*
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
