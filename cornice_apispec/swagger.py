@@ -6,12 +6,10 @@ from apispec import APISpec, BasePlugin
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec.exceptions import DuplicateComponentNameError
 
-
 from cornice.service import get_services
 
 
 class CornicePlugin(BasePlugin):
-
     ignore_methods = ['HEAD', 'OPTIONS']
 
     def path_helper(self, operations, service, **kwargs):
@@ -25,13 +23,14 @@ class CornicePlugin(BasePlugin):
                 continue
 
             schema = args.get('schema', None)
+            response_schemas = args.get('response_schemas', {})
             if schema:
-
                 operations.update({method.lower():
-                                       {'description': 'Get a random pet',
+                                       {'parameters': self.parameter_helper('', service, schema=schema),
+                                        'description': 'Get a random pet',
                                         'requestBody': {'content': {'application/json': {'schema': schema.__name__}}},
-                                        'responses': {200: {'content': {'application/json':
-                                                                            {'schema': schema.__name__}}}}}})
+                                        'responses': {k: {'content': {'application/json': {'schema': v.__name__}}}
+                                                      for k, v in response_schemas.items()}}})
             else:
                 operations.update({method.lower():
                                        {'description': 'Get a random pet',
@@ -40,10 +39,16 @@ class CornicePlugin(BasePlugin):
 
         return service.path
 
-    def parameter_helper(self, parameter, service,  **kwargs):
-        return parameter
+    def parameter_helper(self, parameter, service, **kwargs):
+        schema = kwargs.get('schema')
+        parameters = []
+        for parameter in get_parameter_from_path(service.path):
+            parameters.append({
+                'name': parameter,
+                'description': getattr(schema, 'params_description', {}).get(parameter, ''),
+            })
 
-
+        return parameters
 
 
 def get_parameter_from_path(path):
@@ -53,11 +58,9 @@ def get_parameter_from_path(path):
 
     params = []
     for name in param_names:
-
         params.append(name)
 
     return params
-
 
 
 class CorniceSwaggerException(Exception):
@@ -70,7 +73,6 @@ class CorniceSwagger(object):
     services = []
     """List of cornice services to document. You may use
     `cornice.service.get_services()` to get it."""
-
 
     custom_type_converters = {}
     """Mapping for supporting custom types conversion on the default TypeConverter.
@@ -212,4 +214,3 @@ class CorniceSwagger(object):
             spec.path(service=service)
 
         return spec.to_dict()
-
