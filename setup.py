@@ -32,7 +32,7 @@ REQUIREMENTS_DEV = [
 
 setup(
     name="cornice_apispec",
-    version='0.7.1.dev0',
+    version='0.0.1',
     description="Generate swagger from a Cornice application",
     long_description=README + "\n\n" + CHANGES,
     license="Apache License (2.0)",
@@ -50,7 +50,7 @@ setup(
     author="Josip Delic",
     author_email="delijati@gmx.net",
     url="https://github.com/Cornices/cornice.ext.swagger",
-    packages=find_packages(),
+    packages=["cornice_apispec"],
     include_package_data=True,
     zip_safe=False,
     install_requires=REQUIREMENTS,
