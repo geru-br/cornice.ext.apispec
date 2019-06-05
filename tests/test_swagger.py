@@ -17,14 +17,14 @@ class CorniceSwaggerGeneratorTest(unittest.TestCase):
         service = Service("IceCream", "/icecream/{flavour}")
 
         class IceCream(object):
-            @service.get(validators=(marshmallow_validator, ),
+            @service.get(validators=(marshmallow_validator,),
                          schema=GetRequestSchema(),
                          response_schemas=response_schemas)
             def view_get(self, request):
                 """Serve ice cream"""
                 return self.request.validated
 
-            @service.put(validators=(marshmallow_validator, ), schema=PutRequestSchema())
+            @service.put(validators=(marshmallow_validator,), schema=PutRequestSchema())
             def view_put(self, request):
                 """Add flavour"""
                 return self.request.validated
@@ -44,11 +44,6 @@ class CorniceSwaggerGeneratorTest(unittest.TestCase):
         path = self.spec['paths']['/icecream/{flavour}']
         self.assertIn('get', path)
         self.assertIn('put', path)
-
-    def test_path_parameters(self):
-        parameters = self.spec['paths']['/icecream/{flavour}']['parameters']
-        self.assertEquals(len(parameters), 1)
-        self.assertEquals(parameters[0]['name'], 'flavour')
 
     def test_summary_docstrings(self):
         self.swagger.summary_docstrings = True
@@ -92,36 +87,7 @@ class CorniceSwaggerGeneratorTest(unittest.TestCase):
 
 class ExtractContentTypesTest(unittest.TestCase):
 
-    def test_json_renderer(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        class IceCream(object):
-            @service.get(renderer='json')
-            def view_get(self, request):
-                return self.request.validated
-
-        swagger = CorniceSwagger([service])
-        spec = swagger.generate()
-        self.assertEquals(spec['paths']['/icecream/{flavour}']['get']['produces'],
-                          ['application/json'])
-
-    def test_xml_renderer(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        class IceCream(object):
-            @service.get(renderer='xml')
-            def view_get(self, request):
-                return self.request.validated
-
-        swagger = CorniceSwagger([service])
-        spec = swagger.generate()
-        self.assertEquals(spec['paths']['/icecream/{flavour}']['get']['produces'],
-                          ['text/xml'])
-
     def test_unkown_renderer(self):
-
         service = Service("IceCream", "/icecream/{flavour}")
 
         class IceCream(object):
@@ -133,22 +99,7 @@ class ExtractContentTypesTest(unittest.TestCase):
         spec = swagger.generate()
         self.assertNotIn('produces', spec['paths']['/icecream/{flavour}']['get'])
 
-    def test_single_ctype(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        class IceCream(object):
-            @service.put(content_type='application/json')
-            def view_put(self, request):
-                return self.request.validated
-
-        swagger = CorniceSwagger([service])
-        spec = swagger.generate()
-        self.assertEquals(spec['paths']['/icecream/{flavour}']['put']['consumes'],
-                          ['application/json'])
-
     def test_no_ctype_no_list_with_none(self):
-
         service = Service("IceCream", "/icecream/{flavour}")
 
         class IceCream(object):
@@ -161,7 +112,6 @@ class ExtractContentTypesTest(unittest.TestCase):
         self.assertNotIn('consumes', spec['paths']['/icecream/{flavour}']['put'])
 
     def test_multiple_ctypes(self):
-
         service = Service("IceCream", "/icecream/{flavour}")
 
         class IceCream(object):
@@ -174,130 +124,10 @@ class ExtractContentTypesTest(unittest.TestCase):
         self.assertEquals([k for k in spec['paths']['/icecream/{flavour}']['put']['requestBody']['content'].keys()],
                           ['application/json', 'text/xml'])
 
-    def test_single_ctype_callable(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        def my_ctype_callable(request):
-            return 'application/octet-stream'
-
-        class IceCream(object):
-            @service.put(content_type=my_ctype_callable)
-            def view_put(self, request):
-                return self.request.validated
-
-        swagger = CorniceSwagger([service])
-        spec = swagger.generate()
-        self.assertEquals(spec['paths']['/icecream/{flavour}']['put']['consumes'],
-                          [])
-
-    def test_mixed_ctype_string_and_callable(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        def my_ctype_callable(request):
-            return 'application/octet-stream'
-
-        def my_ctype_callable_2(request):
-            return 'image/png'
-
-        class IceCream(object):
-            @service.put(content_type=(
-                    my_ctype_callable,
-                    'application/json',
-                    my_ctype_callable_2,
-                    'image/jpeg'
-                    )
-            )
-            def view_put(self, request):
-                return self.request.validated
-
-        swagger = CorniceSwagger([service])
-        spec = swagger.generate()
-        self.assertEquals(spec['paths']['/icecream/{flavour}']['put']['consumes'],
-                          ['application/json', 'image/jpeg'])
-
-    def test_ignore_multiple_views_by_ctype(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        class IceCream(object):
-            def view_put(self, request):
-                return "red"
-
-        service.add_view(
-            "put",
-            IceCream.view_put,
-            validators=(marshmallow_validator, ),
-            schema=PutRequestSchema(),
-            content_type='application/json',
-        )
-        service.add_view(
-            "put",
-            IceCream.view_put,
-            validators=(marshmallow_validator, ),
-            schema=PutRequestSchema(),
-            content_type='text/xml',
-        )
-
-        swagger = CorniceSwagger([service])
-        swagger.ignore_ctypes = ['text/xml']
-        spec = swagger.generate()
-        self.assertEquals(spec['paths']['/icecream/{flavour}']['put']['consumes'],
-                          ['application/json'])
-
-    def test_multiple_views_with_different_ctypes_raises_exception(self):
-
-        service = Service("IceCream", "/icecream/{flavour}")
-
-        class IceCream(object):
-            def view_put(self, request):
-                return "red"
-
-        service.add_view(
-            "put",
-            IceCream.view_put,
-            validators=(marshmallow_validator, ),
-            schema=PutRequestSchema(),
-            content_type='application/json',
-        )
-        service.add_view(
-            "put",
-            IceCream.view_put,
-            validators=(marshmallow_validator, ),
-            schema=PutRequestSchema(),
-            content_type='text/xml',
-        )
-
-        swagger = CorniceSwagger([service])
-        self.assertRaises(CorniceSwaggerException, swagger.generate)
-
-
-class ExtractPathTest(unittest.TestCase):
-
-    def test_handles_subpaths_as_parameters(self):
-        service = Service("IceCream", "/icecream/*subpath")
-
-        class IceCream(object):
-            @service.get()
-            def view_get(self, request):
-                return self.request
-
-        swagger = CorniceSwagger([service])
-        spec = swagger.generate()
-        expected = {
-            'name': 'subpath',
-            'required': True,
-            'type': 'string',
-            'in': 'path'
-        }
-        self.assertDictEqual(spec['paths']['/icecream/{subpath}']['parameters'][0], expected)
-
 
 class ExtractTagsTest(unittest.TestCase):
 
     def test_service_defined_tags(self):
-
         service = Service("IceCream", "/icecream/{flavour}", tags=['yum'])
 
         class IceCream(object):
@@ -312,7 +142,6 @@ class ExtractTagsTest(unittest.TestCase):
         self.assertEquals(tags, ['yum'])
 
     def test_view_defined_tags(self):
-
         service = Service("IceCream", "/icecream/{flavour}")
 
         class IceCream(object):
@@ -327,7 +156,6 @@ class ExtractTagsTest(unittest.TestCase):
         self.assertEquals(tags, ['cold', 'foo'])
 
     def test_both_defined_tags(self):
-
         service = Service("IceCream", "/icecream/{flavour}", tags=['yum'])
 
         class IceCream(object):
@@ -342,7 +170,6 @@ class ExtractTagsTest(unittest.TestCase):
         self.assertEquals(tags, ['yum', 'cold', 'foo'])
 
     def test_invalid_view_tag_raises_exception(self):
-
         service = Service("IceCream", "/icecream/{flavour}")
 
         class IceCream(object):
@@ -354,7 +181,6 @@ class ExtractTagsTest(unittest.TestCase):
         self.assertRaises(CorniceSwaggerException, swagger.generate)
 
     def test_invalid_service_tag_raises_exception(self):
-
         service = Service("IceCream", "/icecream/{flavour}", tags='cold')
 
         class IceCream(object):
@@ -369,7 +195,6 @@ class ExtractTagsTest(unittest.TestCase):
 class ExtractOperationIdTest(unittest.TestCase):
 
     def test_view_defined_operation_id(self):
-
         service = Service("IceCream", "/icecream/{flavour}")
 
         @service.get(operation_id='serve_icecream')
@@ -383,7 +208,6 @@ class ExtractOperationIdTest(unittest.TestCase):
         self.assertEquals(op_id, 'serve_icecream')
 
     def test_default_operation_ids(self):
-
         service = Service("IceCream", "/icecream/{flavour}")
 
         @service.get()
@@ -407,7 +231,6 @@ class ExtractOperationIdTest(unittest.TestCase):
         self.assertEquals(op_id, 'put_icecream')
 
     def test_invalid_default_opid_raises_exception(self):
-
         service = Service("IceCream", "/icecream/{flavour}")
 
         @service.get()
@@ -430,13 +253,13 @@ class NotInstantiatedSchemaTest(unittest.TestCase):
             """
 
             # Use GetRequestSchema and ResponseSchemas classes instead of objects
-            @service.get(validators=(marshmallow_validator, ),
+            @service.get(validators=(marshmallow_validator,),
                          schema=GetRequestSchema)
             def view_get(self, request):
                 """Serve icecream"""
                 return self.request.validated
 
-            @service.put(validators=(marshmallow_validator, ), schema=PutRequestSchema())
+            @service.put(validators=(marshmallow_validator,), schema=PutRequestSchema())
             def view_put(self, request):
                 """Add flavour"""
                 return self.request.validated
