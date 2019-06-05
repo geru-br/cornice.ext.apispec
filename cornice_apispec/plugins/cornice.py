@@ -40,9 +40,12 @@ class CornicePlugin(BasePlugin):
             if schema:
 
                 contents = {}
-
-                for content_type in args.get('content_type', ('application/json',)):
+                content_type = args.get('content_type', ('application/json',))
+                if isinstance(content_type, str):
                     contents[content_type] = {'schema': schema}
+                else:
+                    for content_type in args.get('content_type', ('application/json',)):
+                        contents[content_type] = {'schema': schema}
 
                 new_operations[method.lower()].update(
                     {'requestBody': {'content': contents}}
@@ -60,9 +63,11 @@ class CornicePlugin(BasePlugin):
                 parameters[parameter_schema] = parameter_schema
 
             new_operations[method.lower()].update({'parameters': parameters})
-
             for component_id, status_code, schema in ResponseHelper(service, args).responses:
-                new_operations[method.lower()].update({'responses': {status_code: component_id}})
+                if 'responses' in new_operations[method.lower()]:
+                    new_operations[method.lower()]['responses'].update({status_code: component_id})
+                else:
+                    new_operations[method.lower()]['responses'] = {status_code: component_id}
 
             operations.update(new_operations)
 
@@ -79,8 +84,6 @@ class CornicePlugin(BasePlugin):
                 'required': True,
             })
         return parameter
-
-    # def response_helper(self, response, service, status_code, schema, **kwargs):
 
     def response_helper(self, response, schema, status_code, **kwargs):
 
