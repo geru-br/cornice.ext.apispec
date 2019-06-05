@@ -4,7 +4,7 @@ include *.txt
 include LICENSE
 include Makefile
 include tox.ini
-recursive-include cornice_swagger *.html
+recursive-include cornice_apispec *.html
 recursive-include docs *.bat
 recursive-include docs *.py
 recursive-include docs *.rst

@@ -12,7 +12,6 @@ def get_parameter_from_path(path):
 
     params = []
     for name in param_names:
-
         params.append(name)
 
     return params
@@ -116,7 +115,6 @@ class SchemasHelper(Helper):
 
 
 class ResponseHelper(Helper):
-
     """
     Extract response from service
     """
@@ -126,9 +124,10 @@ class ResponseHelper(Helper):
         ret = []
         for status_code, schema in self.args.get('response_schemas', {}).items():
             component_id = get_schema_name(schema)
-            ret.append((component_id, status_code, schema,))
+            ret.append((component_id, int(status_code), schema,))
         else:
-            ret.append(('default', 200, None,))
+            if 200 not in [status[1] for status in ret] and 201 not in [status[1] for status in ret]:
+                ret.append(('default', 200, None,))
 
         return ret
 

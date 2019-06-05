@@ -4,6 +4,7 @@ from apispec.utils import build_reference
 from cornice_apispec.helpers import get_parameter_from_path, SchemasHelper, ResponseHelper, TagsHelper
 from cornice_apispec.utils import get_schema_name, remove_duplicates
 
+
 class CornicePlugin(BasePlugin):
 
     def path_helper(self, operations, path, service, ignore_methods=None, default_op_ids=None, **kwargs):
@@ -39,9 +40,12 @@ class CornicePlugin(BasePlugin):
             if schema:
 
                 contents = {}
-
-                for content_type in args.get('content_type', ('application/json',)):
+                content_type = args.get('content_type', ('application/json',))
+                if isinstance(content_type, str):
                     contents[content_type] = {'schema': schema}
+                else:
+                    for content_type in args.get('content_type', ('application/json',)):
+                        contents[content_type] = {'schema': schema}
 
                 new_operations[method.lower()].update(
                     {'requestBody': {'content': contents}}
@@ -52,21 +56,24 @@ class CornicePlugin(BasePlugin):
                 for parameter in get_parameter_from_path(service.path):
                     parameters[parameter] = parameter
 
-            parameter_schema = None if not SchemasHelper(service, args).path else get_schema_name(SchemasHelper(service, args).path)
+            parameter_schema = None if not SchemasHelper(service, args).path else get_schema_name(
+                SchemasHelper(service, args).path)
 
             if parameter_schema:
                 parameters[parameter_schema] = parameter_schema
 
             new_operations[method.lower()].update({'parameters': parameters})
-
             for component_id, status_code, schema in ResponseHelper(service, args).responses:
-                new_operations[method.lower()].update({'responses': {status_code: component_id}})
+                if 'responses' in new_operations[method.lower()]:
+                    new_operations[method.lower()]['responses'].update({status_code: component_id})
+                else:
+                    new_operations[method.lower()]['responses'] = {status_code: component_id}
 
             operations.update(new_operations)
 
         return path
 
-    def parameter_helper(self, parameter, service,  **kwargs):
+    def parameter_helper(self, parameter, service, **kwargs):
 
         if 'schema' in kwargs:
             schema_ref = build_reference('schema', 3, get_schema_name(kwargs['schema']))
@@ -78,16 +85,13 @@ class CornicePlugin(BasePlugin):
             })
         return parameter
 
-    # def response_helper(self, response, service, status_code, schema, **kwargs):
-
     def response_helper(self, response, schema, status_code, **kwargs):
 
         if schema:
-            schema_ref = build_reference('schema', 3,  get_schema_name(schema))
+            schema_ref = build_reference('schema', 3, get_schema_name(schema))
 
             return {'description': get_schema_name(schema),
                     'content': {'application/json': {'schema': schema_ref}}}
         else:
             return {'description': 'Default Response',
                     'content': {'text/plain': {'schema': {'type': 'string'}}}}
-
