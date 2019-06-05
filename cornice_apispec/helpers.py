@@ -126,7 +126,7 @@ class ResponseHelper(Helper):
             component_id = get_schema_name(schema)
             ret.append((component_id, int(status_code), schema,))
         else:
-            if 200 not in [status[1] for status in ret]:
+            if 200 not in [status[1] for status in ret] and 201 not in [status[1] for status in ret]:
                 ret.append(('default', 200, None,))
 
         return ret
