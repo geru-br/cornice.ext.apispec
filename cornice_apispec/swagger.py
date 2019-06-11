@@ -182,7 +182,8 @@ class CorniceSwagger(object):
 
                 for parameter in get_parameter_from_path(service.path):
                     try:
-                        self.spec.components.parameter(parameter, schema.__type__, service=service)
+                        self.spec.components.parameter(parameter,
+                                                       'path', service=service)
                     except DuplicateComponentNameError:
                         pass
 
@@ -191,7 +192,9 @@ class CorniceSwagger(object):
             for schema in [schema for schema in schemas if schema]:
 
                 try:
-                    self.spec.components.parameter(get_schema_name(schema), schema.__type__, service=service,
-                                                   schema=schema)
+                    for k, v in schema().fields.items():
+                        path_type = schema.__type__ if hasattr(schema, '__type__') else 'path'
+                        self.spec.components.parameter(component_id=get_schema_name(schema), location=path_type,
+                                                       component={'name': k}, service=service)
                 except DuplicateComponentNameError:
                     pass
