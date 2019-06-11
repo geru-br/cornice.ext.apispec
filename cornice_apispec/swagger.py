@@ -52,7 +52,7 @@ class CorniceSwagger(object):
     from the generate call."""
 
     def __init__(self, services=None, def_ref_depth=0, param_ref=False,
-                 resp_ref=False, pyramid_registry=None):
+            resp_ref=False, pyramid_registry=None):
         """
         :param services:
             List of cornice services to document. You may use
@@ -80,7 +80,7 @@ class CorniceSwagger(object):
             self.services = services
 
     def generate(self, title=None, version=None, base_path=None,
-                 info=None, swagger=None, **kwargs):
+            info=None, swagger=None, **kwargs):
         """Generate a Swagger 2.0 documentation. Keyword arguments may be used
         to provide additional information to build methods as such ignores.
 
@@ -102,7 +102,6 @@ class CorniceSwagger(object):
         if self.default_op_ids and not callable(self.default_op_ids):
             raise CorniceSwaggerException
 
-
         title = title or self.api_title
         version = version or self.api_version
         info = info or self.swagger.get('info', {})
@@ -118,7 +117,6 @@ class CorniceSwagger(object):
         )
 
         for service in self.services:
-
             self.generate_schemas(service)
             self.generate_responses(service)
             self.generate_parameters(service)
@@ -172,13 +170,11 @@ class CorniceSwagger(object):
         for method, view, args in service.definitions:
 
             for tag in TagsHelper(service, args).tags:
-
                 self.spec.tag(tag)
 
     def generate_parameters(self, service):
 
         for method, view, args in service.definitions:
-
             if method.lower() in map(str.lower, self.ignore_methods):
                 continue
 
@@ -186,7 +182,8 @@ class CorniceSwagger(object):
 
                 for parameter in get_parameter_from_path(service.path):
                     try:
-                        self.spec.components.parameter(parameter, 'path', service=service)
+                        self.spec.components.parameter(parameter,
+                                                       'path', service=service)
                     except DuplicateComponentNameError:
                         pass
 
@@ -195,6 +192,9 @@ class CorniceSwagger(object):
             for schema in [schema for schema in schemas if schema]:
 
                 try:
-                    self.spec.components.parameter(get_schema_name(schema), 'path', service=service, schema=schema)
+                    for k, v in schema().fields.items():
+                        path_type = schema.__type__ if hasattr(schema, '__type__') else 'path'
+                        self.spec.components.parameter(component_id=get_schema_name(schema), location=path_type,
+                                                       component={'name': k}, service=service)
                 except DuplicateComponentNameError:
                     pass

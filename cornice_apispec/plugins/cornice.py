@@ -13,7 +13,6 @@ class CornicePlugin(BasePlugin):
         """
 
         ignore_methods = ignore_methods or ['HEAD', 'OPTIONS']
-
         for method, view, args in service.definitions:
 
             if method.lower() in map(str.lower, ignore_methods):
@@ -58,7 +57,6 @@ class CornicePlugin(BasePlugin):
 
             parameter_schema = None if not SchemasHelper(service, args).path else get_schema_name(
                 SchemasHelper(service, args).path)
-
             if parameter_schema:
                 parameters[parameter_schema] = parameter_schema
 

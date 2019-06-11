@@ -92,11 +92,18 @@ class SchemasHelper(Helper):
 
             if 'body' in schema_instance.fields:
                 return schema_instance.fields['body'].schema.__class__
-
-        return self.args.get('schema', None)
+        else:
+            schema_instance = self.args.get('schema', None)
+            if hasattr(schema_instance, '__type__') and schema_instance.__type__ != 'query':
+                return schema_instance
+            else:
+                return None
 
     @property
     def querystring(self):
+        schema_instance = self.args.get('schema', None)
+        if hasattr(schema_instance, '__type__') and schema_instance.__type__ == 'query':
+            return schema_instance
         return []
 
     @property
