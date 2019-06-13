@@ -19,19 +19,8 @@ Cornice APISpec
 .. |docs| image:: https://img.shields.io/badge/docs-gh--pages-ff69b4.svg
     :target: https://cornices.github.io/cornice.ext.swagger/
 
-This Project is based on `Cornice Swagger <https://github.com/Cornices/cornice.ext.swagger>`_
-
-*Cornice extension to generate OpenAPI/Swagger Specification*
-
-Cornice ApiSpec creates an
-`OpenAPI/Swagger 2.0 compliant specification <https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md>`_
-from `Cornice <https://github.com/Cornices/cornice>`_ applications
-maximizing the extracted documentation data from functional code,
-while allowing users to override some parts of the generated document.
 
 
-* `Documentation <https://geru-br.github.io/cornice.ext.apispec/>`_
-* `Tutorial <https://geru-br.github.io/cornice.ext.apispec/tutorial.html>`_
-* `Issue tracker <https://github.com/geru-br/cornice.ext.apispec/issues>`_
+
 
 

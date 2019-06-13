@@ -41,7 +41,7 @@ def generate_spec(request, swagger_info, plugins):
     ## Pyramid::
 
         @view_config(
-            apispec_tags['health'],
+            apispec_tags=['health'],
             apispec_summary="Returns healthcheck',
             apispec_description="Long description for operation",
             apispec_show=True)
@@ -57,12 +57,11 @@ def generate_spec(request, swagger_info, plugins):
             description='API HealthCheck',
             path="/health",
             apispec_show=True,
-            apispec_tags['health']
+            apispec_tags=['health']
         )
 
         @health_chech_service.get(
-            apispec_description="Long description for operation",
-            apispec_show=True)
+            apispec_description="Long description for operation")
         def health_check(request):
             request.response.status = 200
             request.response.body = "OK"
