@@ -14,3 +14,4 @@ venusian==1.1.0
 WebOb==1.7.1
 zope.deprecation==4.3.0
 zope.interface==4.4.3
+pyramid_apispec==0.3.3
