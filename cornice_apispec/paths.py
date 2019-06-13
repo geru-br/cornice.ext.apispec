@@ -36,6 +36,10 @@ def add_pyramid_paths(
 
     show_head = kwargs.pop('show_head', False)
     registry = request.registry
+    # TODO: This is the original pyramid_apispec introspector use,
+    #   getting routes instead of views.
+    #   I don't know if we can ride this one and use only the
+    #   introspector views used before in `generate_spec` function
     introspector = registry.introspector
     route = introspector.get("routes", route_name)
     introspectables = introspector.related(route)
