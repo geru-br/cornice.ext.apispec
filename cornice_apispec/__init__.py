@@ -1,7 +1,11 @@
+import logging
+
 from apispec import APISpec
 from cornice_apispec.paths import add_pyramid_paths
 from cornice_apispec.predicates import SwaggerDescriptionPredicate, SwaggerResponseSchemasPredicate, \
     SwaggerShowInPredicate, SwaggerSummaryPredicate, SwaggerTagsPredicate, SwaggerValidateForPredicate
+
+logger = logging.getLogger(__name__)
 
 
 def includeme(config):
@@ -112,5 +116,7 @@ def generate_spec(request, swagger_info, plugins):
     main_description = swagger_info.get('main_description', "")
     if main_description:
         openapi_spec['info'].update({'description': main_description})
-    openapi_spec.update({'servers': [{'url': request.host_url}]})
+    main_server_url = '{}://{}'.format(request.scheme, request.host)
+    logger.info('Server URL for swagger json is {}'.format(main_server_url))
+    openapi_spec.update({'servers': [{'url': main_server_url}]})
     return openapi_spec
