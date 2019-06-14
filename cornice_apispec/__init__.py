@@ -82,6 +82,7 @@ def generate_spec(request, swagger_info, plugins):
         * `show_head`: Show HEAD requests in Swagger (default: False)
         * `tag_list`: Tag dict list. No defaults.
             (example: [{'name': 'my tag', 'description': 'my description'}]).
+        * `scheme`: http or https. If not informed, will extract from request.
 
     :param request: Pyramid Request
     :param swagger_info: Dict
@@ -113,10 +114,14 @@ def generate_spec(request, swagger_info, plugins):
         add_pyramid_paths(spec, route, request=request, show_head=swagger_info.get('show_head', False))
 
     openapi_spec = spec.to_dict()
+
     main_description = swagger_info.get('main_description', "")
     if main_description:
         openapi_spec['info'].update({'description': main_description})
-    main_server_url = '{}://{}'.format(request.scheme, request.host)
+
+    scheme = swagger_info.get('scheme', request.scheme)
+    main_server_url = '{}://{}'.format(scheme, request.host)
     logger.info('Server URL for swagger json is {}'.format(main_server_url))
     openapi_spec.update({'servers': [{'url': main_server_url}]})
+
     return openapi_spec
