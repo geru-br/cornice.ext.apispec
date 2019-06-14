@@ -11,7 +11,7 @@ CHANGES = open(os.path.join(here, "CHANGES.rst")).read()
 REQUIREMENTS = [
     'six',
     'cornice',
-    'apispec',
+    'pyramid_apispec'
 ]
 
 REQUIREMENTS_DEV = [
@@ -32,7 +32,7 @@ REQUIREMENTS_DEV = [
 
 setup(
     name="cornice_apispec",
-    version='0.0.2',
+    version='0.9.0',
     description="Generate swagger from a Cornice application",
     long_description=README + "\n\n" + CHANGES,
     license="Apache License (2.0)",
