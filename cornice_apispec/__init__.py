@@ -112,4 +112,5 @@ def generate_spec(request, swagger_info, plugins):
     main_description = swagger_info.get('main_description', "")
     if main_description:
         openapi_spec['info'].update({'description': main_description})
+    openapi_spec.update({'servers': [{'url': request.host_url}]})
     return openapi_spec
