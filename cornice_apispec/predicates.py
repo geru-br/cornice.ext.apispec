@@ -62,15 +62,3 @@ class SwaggerShowInPredicate(object):
     def __call__(self, context, request):
         return True
 
-
-class SwaggerValidateForPredicate(object):
-    def __init__(self, val, config):
-        self.val = val
-
-    def text(self):
-        return 'swagger_validate_for = %s' % (self.val,)
-
-    phash = text
-
-    def __call__(self, context, request):
-        return True

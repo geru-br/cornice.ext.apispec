@@ -3,7 +3,7 @@ import logging
 from apispec import APISpec
 from cornice_apispec.paths import add_pyramid_paths
 from cornice_apispec.predicates import SwaggerDescriptionPredicate, SwaggerResponseSchemasPredicate, \
-    SwaggerShowInPredicate, SwaggerSummaryPredicate, SwaggerTagsPredicate, SwaggerValidateForPredicate
+    SwaggerShowInPredicate, SwaggerSummaryPredicate, SwaggerTagsPredicate
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,6 @@ def includeme(config):
     config.add_view_predicate('apispec_summary', SwaggerSummaryPredicate)
     config.add_view_predicate('apispec_description', SwaggerDescriptionPredicate)
     config.add_view_predicate('apispec_show', SwaggerShowInPredicate)
-    config.add_view_predicate('apispec_validate_for', SwaggerValidateForPredicate)
     config.pyramid_apispec_add_explorer(
         spec_route_name='openapi_spec')
 
@@ -34,10 +33,6 @@ def generate_spec(request, swagger_info, plugins):
     * `apispec_summary`: (Str) Short Summary for view operation in swagger
     * `apispec_description`: (Str) Long description for view operation in swagger
     * `apispec_show`: (Bool) Only views with this predicate will be included in Swagger
-    * `apispec_validate_for`: (Str, Enum) For the Request Schema, you need to inform
-                                current location for the schema: 'body', 'querystring',
-                                'header' or 'path'
-                                Currently, only body validators are supported.
 
     Examples
     ^^^^^^^^

@@ -37,7 +37,7 @@ def get_operations(spec, view, operations, show_head, autodoc=True):
         elif autodoc:
             for method in methods:
                 auto_doc = AutoDoc(method, view)
-                request_schema = auto_doc.find_request_schema()
+                request_schema = auto_doc.find_schema_for('body')
                 if request_schema:
                     try:
                         spec.components.schema(request_schema.__name__, schema=request_schema)

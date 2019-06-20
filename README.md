@@ -100,7 +100,6 @@ ignore them, if finds a valid docstring to parse. To add `tag` or
 | apispec_summary          | Short description                                                        |
 | apispec_description      | Long description                                                         |
 | apispec_show             | Show in Swagger                                                          |
-| apispec_validate_for     | Validation Schema location (only 'body' for now)                         |
 | apispec_response_schemas | Validation schemas dict for Swagger. Format is `{ status_code: schema }` |
 
 ## Using Cornice
@@ -161,7 +160,6 @@ class MyResourceApi:
           validators=(marshmallow_body_validator,),
           apispec_response_schemas=my_resource_request_response_schemas,
           apispec_summary="Summary for this operation",
-          apispec_validate_for="body",
           content_type='application/json')
     def collection_post(self) -> Response:
         response = self.request.response
