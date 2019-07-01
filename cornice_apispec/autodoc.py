@@ -1,3 +1,4 @@
+
 class AutoDoc(object):
     """Where magic happens.
 
@@ -118,13 +119,18 @@ class AutoDoc(object):
         return self.view_operations
 
     def generate_parameters(self):
+
+        def _observed_name(key):
+            field = schema._declared_fields[key]
+            return getattr(field, "load_from", key)
+
         parameter_list = []
         for parameter_in in ['path', 'querystring', 'headers']:
             schema = self.find_schema_for(parameter_in)
             if schema:
                 parameter_list += [
                     {
-                        'name': key,
+                        'name': _observed_name(key),
                         'in': parameter_in,
                         'required': schema._declared_fields[key].required,
                         'schema': self.get_type_from_field(schema._declared_fields[key]),
@@ -168,3 +174,5 @@ class AutoDoc(object):
             'Int': {"type": "integer"}
         }
         return convert_marshmallow_to_data_type.get(field_name, {"type": "string"})
+
+
