@@ -122,7 +122,7 @@ class AutoDoc(object):
 
         def _observed_name(key):
             field = schema._declared_fields[key]
-            return getattr(field, "load_from", key)
+            return getattr(field, "load_from", None) or key
 
         parameter_list = []
         for parameter_in in ['path', 'querystring', 'headers']:
