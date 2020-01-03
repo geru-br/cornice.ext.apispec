@@ -4,7 +4,7 @@ from cornice_apispec.autodoc import AutoDoc
 from pyramid_apispec.helpers import ALL_METHODS, is_string
 
 
-def get_operations(spec, view, operations, show_head, autodoc=True):
+def get_operations(spec, view, operations, show_head, show_options, autodoc=True):
     if operations is not None:
         return operations
 
@@ -30,6 +30,8 @@ def get_operations(spec, view, operations, show_head, autodoc=True):
             methods = ALL_METHODS[:]
         if 'HEAD' in methods and not show_head:
             methods.remove('HEAD')
+        if 'OPTIONS' in methods and not show_options:
+            methods.remove('OPTIONS')
         operation = load_yaml_from_docstring(f_view.__doc__)
         if operation:
             for method in methods:

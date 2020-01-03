@@ -9,18 +9,25 @@ logger = logging.getLogger(__name__)
 
 
 def includeme(config):
-    config.add_route("openapi_spec", "/openapi.json")
     config.include('pyramid_apispec.views')
     config.add_view_predicate('apispec_response_schemas', SwaggerResponseSchemasPredicate)
     config.add_view_predicate('apispec_tags', SwaggerTagsPredicate)
     config.add_view_predicate('apispec_summary', SwaggerSummaryPredicate)
     config.add_view_predicate('apispec_description', SwaggerDescriptionPredicate)
     config.add_view_predicate('apispec_show', SwaggerShowInPredicate)
-    config.pyramid_apispec_add_explorer(
-        spec_route_name='openapi_spec')
+    # To auto-generate the Swagger view
+    # use settings["auto_generate.swagger.view"] = True
+    # or simply do not set anything.
+    # If you explicitly set this to False
+    # you can define in you App one or more Swagger views.
+    settings = config.registry.settings
+    if settings.get("auto_generate.swagger.view", True) is True:
+        config.add_route("openapi_spec", "/openapi.json")
+        config.pyramid_apispec_add_explorer(
+            spec_route_name='openapi_spec')
 
 
-def generate_spec(request, swagger_info, plugins):
+def generate_spec(request, swagger_info, plugins, filter_by_tags=False):
     """Generate OpenAPI Spec.
 
     This function will start the route introspection in Pyramid,
@@ -75,15 +82,32 @@ def generate_spec(request, swagger_info, plugins):
         * `version`: Api Version (default: '0.1.0')
         * `openapi_version`: OpenAPI version (default: '3.0.2')
         * `show_head`: Show HEAD requests in Swagger (default: False)
+        * `show_options`: Show OPTIONS requests in Swagger (default: True)
         * `tag_list`: Tag dict list. No defaults.
             (example: [{'name': 'my tag', 'description': 'my description'}]).
         * `scheme`: http or https. If not informed, will extract from request.
 
+        The `filter_by_tags` option will filter all views which does not have at
+        least one tag from swagger_info tag_list.
+
     :param request: Pyramid Request
     :param swagger_info: Dict
     :param plugins: APISpec Plugins list
+    :param filter_by_tags: Show only views with tags inside tag_list
     :return: Dict
     """
+    def check_tag(view):
+        if not filter_by_tags:
+            return True
+        view_tags = view['introspectable'].get('apispec_tags', [])
+        openapi_tags = [tag['name'] for tag in spec._tags]
+        if not view_tags:
+            return False
+        for tag in view_tags:
+            if tag in openapi_tags:
+                return True
+        return False
+
     spec = APISpec(
         title=swagger_info.get('title', "OpenAPI Docs"),
         version=swagger_info.get('version', '0.1.0'),
@@ -100,13 +124,15 @@ def generate_spec(request, swagger_info, plugins):
         for view in all_views
         if view['introspectable'].get('apispec_show', False) is True
            and view['introspectable'].get('request_methods')
+           and check_tag(view)
     ]
     all_api_routes = set([
         view['route_name']
         for view in all_api_views
     ])
     for route in all_api_routes:
-        add_pyramid_paths(spec, route, request=request, show_head=swagger_info.get('show_head', False))
+        add_pyramid_paths(spec, route, request=request, show_head=swagger_info.get('show_head', False),
+                          show_options=swagger_info.get('show_options', True))
 
     openapi_spec = spec.to_dict()
 
