@@ -1,0 +1,68 @@
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[[tool.poetry.source]]
+name = "geru"
+url = "https://geru-pypi.geru.com.br/simple"
+
+
+[tool.poetry]
+name = "cornice.ext.apispec"
+version = "0.9.8"
+description = "Cornice apispec extension"
+authors = ["Geru <dev@geru.com.br>"]
+readme = "README.md"
+repository = "https://github.com/geru-br/cornice.ext.apispec"
+homepage = "https://github.com/geru-br/cornice.ext.apispec"
+
+[tool.poetry.dependencies]
+python = "^2.7 || ^3.5 || ^3.6 || ^3.7"
+
+wheel = "*"
+pyramid = [
+    {version = "*",optional = true,extras = ["pyramid"], python = ">3.4"},
+    {version = "1.7.1", optional = true,extras = ["pyramid"], python = "^2.7"}
+]
+
+cornice = [
+    {version = "3.2.0", python = "^2.7"},
+    {version = "^3.2.0", python = ">3.4"}
+]
+
+pyramid_apispec = "^0.3.3"
+
+
+[tool.poetry.dev-dependencies]
+flake8 = [
+    {version = "2.6.2", python = "^2.7"},
+    {version = "*", python = ">3.4"}
+]
+flake8-docstrings = "*"
+pytest = [
+    {version = "4.2.1", python = "^2.7"},
+    {version = "*", python = ">3.4"}
+]
+pytest-cov = "*"
+more-itertools = [
+    {version = "^5", python = "^2.7"},
+    {version = "^6", python = ">3.4"}
+]
+tox = "*"
+twine = "*"
+ipdb = "*"
+
+pluggy = [
+    {version = "0.11.0", python = "^2.7"},
+    {version = "*", python = ">3.4"}
+]
+
+
+cookies = [{ version = "*", python = "~2.7" }]
+mock = [{ version = "*", python = "~2.7" }]
+pathlib = [{ version = "^1.0", python = "~2.7" }]
+pydocstyle = [{ version = "2.1.1", python = "~2.7" }]
+webtest = "*"
+
+marshmallow = "^2.19.5"
+

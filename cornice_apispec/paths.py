@@ -63,7 +63,8 @@ def add_pyramid_paths(
         response_schemas = maybe_view.get('apispec_response_schemas', {})
         for _, value in response_schemas.items():
             try:
-                spec.components.schema(value.__name__, schema=value)
+
+                spec.components.schema(value.__class__.__name__, schema=value)
             except DuplicateComponentNameError:
                 pass
 

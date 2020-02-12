@@ -106,7 +106,7 @@ class AutoDoc(object):
             operations_dict = {}
             for status_code in self.response_schemas:
                 schema = self.response_schemas[status_code]
-                schema_name = schema.__name__
+                schema_name = schema.__class__.__name__
                 status_code_dict = {
                     status_code: {
                         'description': schema.__doc__ or "",
