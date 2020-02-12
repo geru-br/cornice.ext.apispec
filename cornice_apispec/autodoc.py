@@ -84,6 +84,12 @@ class AutoDoc(object):
             if validator.__dict__.get('location', '') == location:
                 return request_schema
 
+        # No valid cornice validator was found
+        # but request_schema exists. In this case,
+        # return the nested match schema
+        maybe_nested = request_schema._declared_fields.get(location, None)
+        return maybe_nested.nested if maybe_nested else None
+
     def to_dict(self):
         self.view_operations.setdefault(self.method.lower(), {"responses": {}})
         if self.tags:

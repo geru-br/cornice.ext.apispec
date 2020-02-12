@@ -35,6 +35,7 @@ def add_pyramid_paths(
         request = get_current_request()
 
     show_head = kwargs.pop('show_head', False)
+    show_options = kwargs.pop('show_options', True)
     registry = request.registry
     # TODO: This is the original pyramid_apispec introspector use,
     #   getting routes instead of views.
@@ -70,5 +71,6 @@ def add_pyramid_paths(
         pattern = reformat_pattern(pattern)
         spec.path(
             pattern,
-            operations=get_operations(spec, maybe_view, operations, autodoc=autodoc, show_head=show_head)
+            operations=get_operations(spec, maybe_view, operations, autodoc=autodoc, show_head=show_head,
+                                      show_options=show_options)
         )
