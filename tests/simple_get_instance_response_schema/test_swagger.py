@@ -10,6 +10,6 @@ def test_swagger(app):
 
     response = app.get('/api-info')
 
-    expected = {'paths': {'/': {'get': {'responses': {'200': {'description': '', 'content': {'text/plain': {'schema': {'$ref': '#/components/schemas/Schema'}}}}}}}}, 'info': {'title': 'My API', 'version': '1.0.0', 'description': 'Main description for API'}, 'tags': [{'tag': 'My Tag', 'description': 'Tag description'}], 'openapi': '3.0.2', 'components': {'schemas': {'Schema': {'type': 'object', 'properties': {'name': {'type': 'string'}}, 'required': ['name']}}}, 'servers': [{'url': 'http://localhost:80'}]}
+    expected = {'paths': {'/': {'get': {'responses': {'200': {'description': '', 'content': {'text/plain': {'schema': {'$ref': '#/components/schemas/Schema-513b0'}}}}}}}}, 'info': {'title': 'My API', 'version': '1.0.0', 'description': 'Main description for API'}, 'tags': [{'tag': 'My Tag', 'description': 'Tag description'}], 'openapi': '3.0.2', 'components': {'schemas': {'Schema-513b0': {'type': 'object', 'properties': {'name': {'type': 'string'}}, 'required': ['name']}}}, 'servers': [{'url': 'http://localhost:80'}]}
 
     assert response.json == expected
