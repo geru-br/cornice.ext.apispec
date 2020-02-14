@@ -52,3 +52,6 @@ docs-pub:
 docs-pack: docs
 	cd docs/build/html; zip -r docs.zip *
 	mv docs/build/html/docs.zip .
+
+setup.py:
+	python create_setup.py

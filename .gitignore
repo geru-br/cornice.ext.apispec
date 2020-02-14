@@ -100,4 +100,5 @@ docs/build
 # Macosx .DS_Store
 .DS_Store
 .envrc
+setup.py
 
