@@ -1,5 +1,6 @@
 from wsgiref.simple_server import make_server
 
+from datetime import datetime
 import marshmallow
 from apispec.ext.marshmallow import MarshmallowPlugin
 from cornice import Service
@@ -12,6 +13,7 @@ from cornice_apispec import generate_spec
 
 class Schema(marshmallow.Schema):
     name = marshmallow.fields.String(required=True)
+    birthday = marshmallow.fields.Date()
 
 
 response_schemas = {
@@ -29,7 +31,12 @@ user_info = Service(name='users',
 
 @user_info.get()
 def get_info(request):
-    return {'name': 'Name'}
+    return {'name': 'Name', "birthday": datetime.utcnow().date().isoformat()}
+
+
+@user_info.post(schema=Schema)
+def post_info(request):
+    return {'name': 'Name', "birthday": datetime.utcnow().date().isoformat()}
 
 
 @view_config(route_name='openapi_spec', renderer='json')
