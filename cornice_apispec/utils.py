@@ -12,8 +12,8 @@ def get_schema_name(schema):
             return schema.__apispec__.get('model')
 
         if 'exclude' in schema.__dict__:
-            key = "{}".format(schema.__dict__.get('exclude')).encode()
+            key = "{}".format(list(schema.__dict__.get('exclude'))).encode('utf-8')
 
-            return "{}-{}".format(schema.__class__.__name__, hashlib.sha256(key).hexdigest()[:5])
+            return "{}-{}".format(schema.__class__.__name__, hashlib.md5(key).hexdigest()[:5])
         else:
             return schema.__class__.__name__

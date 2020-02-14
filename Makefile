@@ -55,3 +55,12 @@ docs-pack: docs
 
 setup.py:
 	python create_setup.py
+
+install:
+	poetry install
+
+test:
+	poetry run pytest -vvv
+
+test-all:
+	poetry run tox

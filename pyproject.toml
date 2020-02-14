@@ -66,3 +66,7 @@ webtest = "*"
 
 marshmallow = "^2.19.5"
 
+attrs= [
+    {version = "19.1.0", python = "^2.7"},
+    {version = "*", python = ">3.4"}
+]
