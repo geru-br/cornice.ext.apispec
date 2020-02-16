@@ -1,5 +1,22 @@
 version: 2
 jobs:
+
+  test:
+    docker:
+      - image: python:3.7
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: install poetry and cornice.ext.apispect dependencies
+          command: |
+            pip install poetry==0.12.16
+            make ci-config-poetry
+            make install
+      - run:
+          name: Run Tests
+          command: |
+            make test-all
   deploy:
     docker:
       - image: python:3.7
@@ -11,13 +28,14 @@ jobs:
           command: |
             pip install poetry==0.12.16 twine
       - run:
-          name: bump porto_alegre_client minor version, build and publish to geru-pypi
+          name: bump cornice.ext.apispect minor version, build and publish to geru-pypi
           command: |
             make publish
 workflows:
   version: 2
-  deploy:
+  test-and-deploy:
     jobs:
+      - test
       - deploy:
           filters:
             branches:
