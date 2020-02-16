@@ -56,6 +56,14 @@ docs-pack: docs
 setup.py:
 	python create_setup.py
 
+
+build:
+	poetry build
+
+poetry-config:
+	poetry config repositories.geru https://geru-pypi.geru.com.br/simple/
+	poetry config http-basic.geru ${PYPI_USERNAME} ${PYPI_PASSWORD}
+
 install:
 	poetry install
 
@@ -64,3 +72,34 @@ test:
 
 test-all:
 	poetry run tox
+
+
+clean-build:
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -f {} +
+
+clean-pyc:
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
+
+clean-test:
+	rm -f .coverage
+	rm -fr htmlcov/
+	rm -fr .pytest_cache
+
+clean: clean-build clean-pyc clean-test
+
+
+
+publish: clean build
+	twine upload --repository-url https://geru-pypi.geru.com.br/ dist/*
+
+	# Using twine because of this poetry's issue: https://github.com/sdispater/poetry/issues/239
+	# poetry config repositories.geru-pypi https://geru-pypi.geru.com.br/
+	# poetry publish -r geru-pypi --username ${PYPI_USERNAME} --password ${PYPI_PASSWORD}
+
