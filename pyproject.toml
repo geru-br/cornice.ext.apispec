@@ -9,7 +9,7 @@ url = "https://geru-pypi.geru.com.br/simple"
 
 [tool.poetry]
 name = "cornice_apispec"
-version = "0.10.1"
+version = "0.10.2"
 description = "Cornice apispec extension"
 authors = ["Geru <dev@geru.com.br>"]
 readme = "README.md"
@@ -21,8 +21,8 @@ python = "^2.7 || ^3.5 || ^3.6 || ^3.7"
 
 wheel = "*"
 pyramid = [
-    {version = "*",optional = true,extras = ["pyramid"], python = ">3.4"},
-    {version = "1.7.1", optional = true,extras = ["pyramid"], python = "^2.7"}
+    {version = "*",optional = true, python = ">3.4"},
+    {version = "1.7.1", optional = true, python = "^2.7"}
 ]
 
 cornice = [
