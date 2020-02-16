@@ -101,4 +101,5 @@ docs/build
 .DS_Store
 .envrc
 setup.py
+.autoenv
 
