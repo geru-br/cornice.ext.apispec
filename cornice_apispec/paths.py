@@ -70,10 +70,15 @@ def add_pyramid_paths(
             except DuplicateComponentNameError:
                 pass
 
-        pattern = route["pattern"]
-        pattern = reformat_pattern(pattern)
+        original_pattern = route["pattern"]
+        pattern = reformat_pattern(original_pattern)
         spec.path(
             pattern,
-            operations=get_operations(spec, maybe_view, operations, autodoc=autodoc, show_head=show_head,
-                                      show_options=show_options)
+            operations=get_operations(
+                spec, pattern, maybe_view, operations,
+                autodoc=autodoc,
+                show_head=show_head,
+                show_options=show_options,
+                cornice_service=request.registry.cornice_services.get(original_pattern)
+            )
         )

@@ -118,21 +118,21 @@ def generate_spec(request, swagger_info, plugins, filter_by_tags=False):
         spec.tag(tag)
     registry = request.registry
     introspector = registry.introspector
-    all_views = introspector.get_category('views')
     all_api_views = [
         view['introspectable']
-        for view in all_views
+        for view in introspector.get_category('views')
         if view['introspectable'].get('apispec_show', False) is True
            and view['introspectable'].get('request_methods')
            and check_tag(view)
     ]
-    all_api_routes = set([
-        view['route_name']
-        for view in all_api_views
-    ])
-    for route in all_api_routes:
-        add_pyramid_paths(spec, route, request=request, show_head=swagger_info.get('show_head', False),
-                          show_options=swagger_info.get('show_options', True))
+
+    for api_view in all_api_views:
+        add_pyramid_paths(
+            spec, api_view.get('route_name'),
+            request=request,
+            show_head=swagger_info.get('show_head', False),
+            show_options=swagger_info.get('show_options', True)
+        )
 
     openapi_spec = spec.to_dict()
 

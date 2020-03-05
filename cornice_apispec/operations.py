@@ -1,10 +1,12 @@
+import re
+
 from apispec.exceptions import DuplicateComponentNameError
 from apispec.yaml_utils import load_operations_from_docstring, load_yaml_from_docstring
 from cornice_apispec.autodoc import AutoDoc
 from pyramid_apispec.helpers import ALL_METHODS, is_string
 
 
-def get_operations(spec, view, operations, show_head, show_options, autodoc=True):
+def get_operations(spec, uri_pattern, view, operations, show_head, show_options, cornice_service, autodoc=True):
     if operations is not None:
         return operations
 
@@ -37,8 +39,11 @@ def get_operations(spec, view, operations, show_head, show_options, autodoc=True
             for method in methods:
                 view_operations[method.lower()] = operation
         elif autodoc:
+            path_parameters = get_uri_placeholders(uri_pattern)
             for method in methods:
-                auto_doc = AutoDoc(method, view)
+                auto_doc = AutoDoc(method, view, cornice_service)
+                if path_parameters:
+                    auto_doc.add_path_parameter(path_parameters)
                 request_schema = auto_doc.find_schema_for('body')
                 if request_schema:
                     try:
@@ -50,3 +55,8 @@ def get_operations(spec, view, operations, show_head, show_options, autodoc=True
     operations.update(view_operations)
 
     return operations
+
+
+def get_uri_placeholders(uri_pattern):
+    """pattern: {any}"""
+    return re.findall('\{(.*?)\}', uri_pattern)
