@@ -94,11 +94,16 @@ class AutoDoc(object):
             if validator.__dict__.get('location', '') == location:
                 return request_schema
 
+        # assumes the standard request scheme for http methods that contains data in the request body
+        contains_body_method = self.method.lower() in ('post', 'patch', 'put', 'delete')
+        is_location_body = location == 'body'
+        default_request_schema = request_schema if is_location_body and contains_body_method else None
+
         # No valid cornice validator was found
         # but request_schema exists. In this case,
         # return the nested match schema
         maybe_nested = request_schema._declared_fields.get(location, None)
-        return maybe_nested.nested if maybe_nested else None
+        return maybe_nested.nested if maybe_nested else default_request_schema
 
     def to_dict(self):
         self._add_tags()

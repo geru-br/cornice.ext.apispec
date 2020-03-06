@@ -47,8 +47,8 @@ def get_info(request):
 
 @user_info.post(
     schema=Schema,
-    content_type='application/json',
-    validators=(apispec_marshmallow_body_validator,))
+    content_type='application/json'
+)
 def post_info(request):
     return {'name': 'Name', "birthday": datetime.utcnow().date().isoformat()}
 
