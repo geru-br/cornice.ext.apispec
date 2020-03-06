@@ -64,10 +64,16 @@ class AutoDoc(object):
     @property
     def content_type(self):
         content_type_info = self.cornice_service.get_contenttypes(self.method)
-        return content_type_info[0] if content_type_info[0] else DEFAULT_CONTENT_TYPE
+        try:
+            return content_type_info[0] or DEFAULT_CONTENT_TYPE
+        except IndexError:
+            return DEFAULT_CONTENT_TYPE
 
     def _find_request_schema(self):
-        return self.cornice_service.filter_argumentlist(self.method, 'schema')[0]
+        try:
+            return self.cornice_service.filter_argumentlist(self.method, 'schema')[0]
+        except IndexError:
+            return None
 
     def add_path_parameter(self, path_parameters):
         parameter_list = []
