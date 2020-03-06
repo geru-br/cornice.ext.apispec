@@ -125,19 +125,27 @@ class AutoDoc(object):
             responses_dict = {}
             for status_code in self.response_schemas:
                 schema = self.response_schemas[status_code]
-                schema_name = get_schema_name(schema)
-                status_code_dict = {
-                    status_code: {
-                        'description': schema.__doc__ or "",
-                        'content': {
-                            self.content_type: {
-                                'schema': {
-                                    "$ref": "#/components/schemas/{}".format(schema_name)
+                if isinstance(schema, str):  # is only text description
+                    status_code_dict = {
+                        status_code: {
+                            'description': schema,
+                            'content': {}
+                        }
+                    }
+                else:
+                    schema_name = get_schema_name(schema)
+                    status_code_dict = {
+                        status_code: {
+                            'description': schema.__doc__ or "",
+                            'content': {
+                                self.content_type: {
+                                    'schema': {
+                                        "$ref": "#/components/schemas/{}".format(schema_name)
+                                    }
                                 }
                             }
                         }
                     }
-                }
                 responses_dict.update(status_code_dict)
             # Update current method dict in Operation
             self._add_responses(responses_dict)

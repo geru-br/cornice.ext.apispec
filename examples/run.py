@@ -25,7 +25,9 @@ class Error(marshmallow.Schema):
 
 response_schemas = {
     200: Schema,
-    400: Error
+    400: Error,
+    301: 'Redirect URL',
+    404: 'Not Found by ID'
 }
 
 user_info = Service(name='users',
