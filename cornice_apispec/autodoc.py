@@ -166,7 +166,7 @@ class AutoDoc(object):
                 'content': {
                     self.content_type: {
                         'schema': {
-                            '$ref': "#/components/schemas/{}".format(body_schema.__name__)
+                            '$ref': "#/components/schemas/{}".format(get_schema_name(body_schema))
                         }
                     }
                 }

@@ -17,3 +17,11 @@ def get_schema_name(schema):
             return "{}-{}".format(schema.__class__.__name__, hashlib.md5(key).hexdigest()[:5])
         else:
             return schema.__class__.__name__
+
+
+def add_schema_in_spec(spec, schema):
+    from apispec.exceptions import DuplicateComponentNameError
+    try:
+        spec.components.schema(get_schema_name(schema), schema=schema)
+    except DuplicateComponentNameError:
+        pass

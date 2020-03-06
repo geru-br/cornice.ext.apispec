@@ -46,7 +46,7 @@ def get_info(request):
 
 
 @user_info.post(
-    schema=Schema,
+    schema=Schema(),
     content_type='application/json'
 )
 def post_info(request):

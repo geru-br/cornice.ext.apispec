@@ -1,9 +1,8 @@
-from apispec.exceptions import DuplicateComponentNameError
-from cornice_apispec.operations import get_operations
 from pyramid.threadlocal import get_current_request
 from pyramid_apispec.helpers import check_methods_matching, is_view, reformat_pattern, should_ignore_view
 
-from cornice_apispec.utils import get_schema_name
+from cornice_apispec.operations import get_operations
+from cornice_apispec.utils import add_schema_in_spec
 
 
 def add_pyramid_paths(
@@ -63,12 +62,8 @@ def add_pyramid_paths(
 
         # Find Response Schemas if available in View Predicate
         response_schemas = maybe_view.get('apispec_response_schemas', {})
-        for _, value in response_schemas.items():
-            try:
-
-                spec.components.schema(get_schema_name(value), schema=value)
-            except DuplicateComponentNameError:
-                pass
+        for _, schema in response_schemas.items():
+            add_schema_in_spec(spec, schema)
 
         original_pattern = route["pattern"]
         pattern = reformat_pattern(original_pattern)
