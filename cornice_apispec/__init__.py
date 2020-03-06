@@ -114,25 +114,21 @@ def generate_spec(request, swagger_info, plugins, filter_by_tags=False):
         plugins=[plugin() for plugin in plugins],
         openapi_version=swagger_info.get('openapi_version', '3.0.2')
     )
+
     for tag in swagger_info.get('tag_list', []):
         spec.tag(tag)
-    registry = request.registry
-    introspector = registry.introspector
-    all_views = introspector.get_category('views')
-    all_api_views = [
-        view['introspectable']
-        for view in all_views
-        if view['introspectable'].get('apispec_show', False) is True
-           and view['introspectable'].get('request_methods')
-           and check_tag(view)
-    ]
-    all_api_routes = set([
-        view['route_name']
-        for view in all_api_views
-    ])
-    for route in all_api_routes:
-        add_pyramid_paths(spec, route, request=request, show_head=swagger_info.get('show_head', False),
-                          show_options=swagger_info.get('show_options', True))
+
+    for view in request.registry.introspector.get_category('views'):
+        show_apispec = view['introspectable'].get('apispec_show', False) is True
+        has_request_methods = view['introspectable'].get('request_methods')
+        has_tag = check_tag(view)
+        if show_apispec and has_request_methods and has_tag:
+            add_pyramid_paths(
+                spec, view['introspectable'].get('route_name'),
+                request=request,
+                show_head=swagger_info.get('show_head', False),
+                show_options=swagger_info.get('show_options', True)
+            )
 
     openapi_spec = spec.to_dict()
 

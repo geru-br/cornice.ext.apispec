@@ -1,14 +1,16 @@
+from datetime import datetime
 from wsgiref.simple_server import make_server
 
-from datetime import datetime
 import marshmallow
 from apispec.ext.marshmallow import MarshmallowPlugin
 from cornice import Service
 from pyramid.config import Configurator
-from cornice.validators import marshmallow_body_validator
 from pyramid.view import view_config
 
 from cornice_apispec import generate_spec
+from cornice_apispec.validators import (
+    apispec_marshmallow_body_validator
+)
 
 
 class Schema(marshmallow.Schema):
@@ -16,17 +18,26 @@ class Schema(marshmallow.Schema):
     birthday = marshmallow.fields.Date()
 
 
+class Error(marshmallow.Schema):
+    code = marshmallow.fields.String()
+    description = marshmallow.fields.String()
+
+
 response_schemas = {
     200: Schema,
+    400: Error
 }
 
-
 user_info = Service(name='users',
-                    path='/',
-                    validators=(marshmallow_body_validator,),
+                    path='/{id}/{action:.*}',
                     apispec_show=True,
                     apispec_response_schemas=response_schemas,
                     description='Get and set user data.')
+
+
+@user_info.delete()
+def get_info(request):
+    return {'name': 'Name', "birthday": datetime.utcnow().date().isoformat()}
 
 
 @user_info.get()
@@ -34,7 +45,26 @@ def get_info(request):
     return {'name': 'Name', "birthday": datetime.utcnow().date().isoformat()}
 
 
-@user_info.post(schema=Schema)
+@user_info.post(
+    schema=Schema(),
+    content_type='application/json'
+)
+def post_info(request):
+    return {'name': 'Name', "birthday": datetime.utcnow().date().isoformat()}
+
+
+@user_info.put(
+    schema=Schema,
+    content_type='application/json',
+    validators=(apispec_marshmallow_body_validator,))
+def post_info(request):
+    return {'name': 'Name', "birthday": datetime.utcnow().date().isoformat()}
+
+
+@user_info.patch(
+    schema=Schema,
+    content_type='application/json',
+    validators=(apispec_marshmallow_body_validator,))
 def post_info(request):
     return {'name': 'Name', "birthday": datetime.utcnow().date().isoformat()}
 
@@ -52,7 +82,7 @@ def api_spec(request):
     swagger_info = {
         'title': "My API",
         'version': "1.0.0",
-        'tag_list': [{'tag': 'My Tag', 'description': 'Tag description'}],
+        'tag_list': [{'name': 'My Tag', 'description': 'Tag description'}],
         'main_description': "Main description for API",
         'show_head': False
     }
@@ -62,7 +92,6 @@ def api_spec(request):
 
 if __name__ == '__main__':
     with Configurator() as config:
-
         config.include('cornice')
         config.include('cornice_apispec')
 

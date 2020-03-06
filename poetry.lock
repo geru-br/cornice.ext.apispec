@@ -44,7 +44,6 @@ url = "https://geru-pypi.geru.com.br/simple"
 [[package]]
 category = "dev"
 description = "Atomic file writes."
-marker = "python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or python_version >= \"2.7\" and python_version < \"3.0\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\") or python_version >= \"2.7\" and python_version < \"3.0\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or python_version >= \"2.7\" and python_version < \"3.0\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\"))"
 name = "atomicwrites"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
@@ -97,6 +96,20 @@ url = "https://geru-pypi.geru.com.br/simple"
 
 [[package]]
 category = "dev"
+description = "Backport of functools.lru_cache"
+marker = "python_version < \"3\""
+name = "backports.functools-lru-cache"
+optional = false
+python-versions = ">=2.6"
+version = "1.6.1"
+
+[package.source]
+reference = "geru"
+type = "legacy"
+url = "https://geru-pypi.geru.com.br/simple"
+
+[[package]]
+category = "dev"
 description = "Screen-scraping library"
 name = "beautifulsoup4"
 optional = false
@@ -117,7 +130,7 @@ description = "An easy safelist-based HTML-sanitizing tool."
 name = "bleach"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "3.1.0"
+version = "3.1.1"
 
 [package.dependencies]
 six = ">=1.9.0"
@@ -157,7 +170,7 @@ url = "https://geru-pypi.geru.com.br/simple"
 [[package]]
 category = "dev"
 description = "Cross-platform colored terminal text."
-marker = "python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or platform_system == \"Windows\" and sys_platform == \"win32\" or python_version >= \"3.4\" and sys_platform == \"win32\" or python_version >= \"2.7\" and python_version < \"3.0\" and sys_platform == \"win32\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or platform_system == \"Windows\" or python_version >= \"3.4\" and sys_platform == \"win32\") or python_version >= \"2.7\" and python_version < \"3.0\" and sys_platform == \"win32\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or platform_system == \"Windows\" and sys_platform == \"win32\" or python_version >= \"3.4\" and sys_platform == \"win32\" or python_version >= \"2.7\" and python_version < \"3.0\" and sys_platform == \"win32\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or platform_system == \"Windows\" or python_version >= \"3.4\" and sys_platform == \"win32\"))"
+marker = "python_version >= \"2.7\" and python_version < \"3.0\" and sys_platform == \"win32\" and (python_version >= \"2.7\" and python_version < \"3.0\" and sys_platform == \"win32\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or platform_system == \"Windows\" or python_version >= \"3.4\" and sys_platform == \"win32\") or sys_platform == \"win32\" and python_version != \"3.4\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or platform_system == \"Windows\" or python_version >= \"3.4\" and sys_platform == \"win32\") or python_version > \"3.4\" and sys_platform == \"win32\" and platform_system == \"Windows\" or sys_platform == \"win32\" and platform_system == \"Windows\" or platform_system == \"Windows\" or python_version >= \"3.4\" and sys_platform == \"win32\" and platform_system == \"Windows\") or sys_platform == \"win32\" and python_version != \"3.4\" and (python_version >= \"2.7\" and python_version < \"3.0\" and sys_platform == \"win32\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or platform_system == \"Windows\" or python_version >= \"3.4\" and sys_platform == \"win32\") or sys_platform == \"win32\" and python_version != \"3.4\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or platform_system == \"Windows\" or python_version >= \"3.4\" and sys_platform == \"win32\") or python_version > \"3.4\" and sys_platform == \"win32\" and platform_system == \"Windows\" or sys_platform == \"win32\" and platform_system == \"Windows\" or platform_system == \"Windows\" or python_version >= \"3.4\" and sys_platform == \"win32\" and platform_system == \"Windows\") or python_version >= \"2.7\" and python_version < \"3.0\" and sys_platform == \"win32\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or platform_system == \"Windows\" or python_version >= \"3.4\" and sys_platform == \"win32\") and platform_system == \"Windows\" or sys_platform == \"win32\" and python_version != \"3.4\" and (python_version > \"3.4\" and sys_platform == \"win32\" or sys_platform == \"win32\" or platform_system == \"Windows\" or python_version >= \"3.4\" and sys_platform == \"win32\") and platform_system == \"Windows\" or python_version > \"3.4\" and sys_platform == \"win32\" and platform_system == \"Windows\" or sys_platform == \"win32\" and platform_system == \"Windows\" or platform_system == \"Windows\" or python_version >= \"3.4\" and sys_platform == \"win32\" and platform_system == \"Windows\""
 name = "colorama"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
@@ -176,6 +189,19 @@ name = "configparser"
 optional = false
 python-versions = ">=2.6"
 version = "4.0.2"
+
+[package.source]
+reference = "geru"
+type = "legacy"
+url = "https://geru-pypi.geru.com.br/simple"
+
+[[package]]
+category = "dev"
+description = "Backports and enhancements for the contextlib module"
+name = "contextlib2"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "0.6.0.post1"
 
 [package.source]
 reference = "geru"
@@ -256,7 +282,7 @@ marker = "python_version >= \"3.4\""
 name = "decorator"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*"
-version = "4.4.1"
+version = "4.4.2"
 
 [package.source]
 reference = "geru"
@@ -424,7 +450,7 @@ marker = "python_version > \"3.4\""
 name = "hupper"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
-version = "1.9.1"
+version = "1.10.2"
 
 [package.source]
 reference = "geru"
@@ -437,7 +463,7 @@ description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "2.8"
+version = "2.9"
 
 [package.source]
 reference = "geru"
@@ -447,7 +473,7 @@ url = "https://geru-pypi.geru.com.br/simple"
 [[package]]
 category = "dev"
 description = "Read metadata from Python packages"
-marker = "python_version > \"3.4\" and python_version < \"3.8\" or python_version < \"3.8\""
+marker = "python_version >= \"2.7\" and python_version < \"3.0\" and (python_version >= \"2.7\" and python_version < \"3.0\" and (python_version > \"3.4\" and python_version < \"3.8\" or python_version < \"3.8\") or python_version > \"3.4\" and python_version < \"3.8\" or python_version < \"3.8\" or python_version > \"3.4\" and python_version < \"3.7\") or python_version >= \"2.7\" and python_version < \"3.0\" and (python_version > \"3.4\" and python_version < \"3.8\" or python_version < \"3.8\") or python_version > \"3.4\" and python_version < \"3.8\" or python_version < \"3.8\" or python_version > \"3.4\" and python_version < \"3.7\""
 name = "importlib-metadata"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
@@ -467,8 +493,17 @@ description = "Read resources from Python packages"
 marker = "python_version < \"3.7\""
 name = "importlib-resources"
 optional = false
-python-versions = ">=2.7,!=3.0,!=3.1,!=3.2,!=3.3"
-version = "1.0.2"
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+version = "1.2.0"
+
+[package.dependencies]
+[package.dependencies.importlib-metadata]
+python = "<3.8"
+version = "*"
+
+[package.dependencies.zipp]
+python = "<3.8"
+version = ">=0.4"
 
 [package.source]
 reference = "geru"
@@ -481,7 +516,7 @@ description = "IPython-enabled pdb"
 name = "ipdb"
 optional = false
 python-versions = ">=2.7"
-version = "0.12.3"
+version = "0.13.2"
 
 [package.dependencies]
 setuptools = "*"
@@ -559,7 +594,7 @@ description = "A lightweight library for converting complex datatypes to and fro
 name = "marshmallow"
 optional = false
 python-versions = "*"
-version = "2.20.5"
+version = "2.21.0"
 
 [package.source]
 reference = "geru"
@@ -649,7 +684,7 @@ description = "Core utilities for Python packages"
 name = "packaging"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "20.1"
+version = "20.3"
 
 [package.dependencies]
 pyparsing = ">=2.0.2"
@@ -667,7 +702,7 @@ marker = "python_version >= \"3.4\""
 name = "parso"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "0.6.1"
+version = "0.6.2"
 
 [package.source]
 reference = "geru"
@@ -804,7 +839,10 @@ description = "plugin and hook calling mechanisms for python"
 name = "pluggy"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "0.11.0"
+version = "0.12.0"
+
+[package.dependencies]
+importlib-metadata = ">=0.12"
 
 [package.source]
 reference = "geru"
@@ -1075,21 +1113,29 @@ category = "dev"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "4.2.1"
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
+version = "4.6.9"
 
 [package.dependencies]
 atomicwrites = ">=1.0"
 attrs = ">=17.4.0"
-colorama = "*"
-pluggy = ">=0.7"
+packaging = "*"
+pluggy = ">=0.12,<1.0"
 py = ">=1.5.0"
-setuptools = "*"
 six = ">=1.10.0"
+wcwidth = "*"
+
+[package.dependencies.colorama]
+python = "<3.4.0 || >=3.5.0"
+version = "*"
 
 [package.dependencies.funcsigs]
 python = "<3.0"
-version = "*"
+version = ">=1.0"
+
+[package.dependencies.importlib-metadata]
+python = "<3.8"
+version = ">=0.12"
 
 [package.dependencies.pathlib2]
 python = "<3.6"
@@ -1201,12 +1247,12 @@ description = "Python HTTP for Humans."
 name = "requests"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-version = "2.22.0"
+version = "2.23.0"
 
 [package.dependencies]
 certifi = ">=2017.4.17"
-chardet = ">=3.0.2,<3.1.0"
-idna = ">=2.5,<2.9"
+chardet = ">=3.0.2,<4"
+idna = ">=2.5,<3"
 urllib3 = ">=1.21.1,<1.25.0 || >1.25.0,<1.25.1 || >1.25.1,<1.26"
 
 [package.source]
@@ -1224,6 +1270,19 @@ version = "0.9.1"
 
 [package.dependencies]
 requests = ">=2.0.1,<3.0.0"
+
+[package.source]
+reference = "geru"
+type = "legacy"
+url = "https://geru-pypi.geru.com.br/simple"
+
+[[package]]
+category = "dev"
+description = "scandir, a better directory iterator and faster os.walk()"
+name = "scandir"
+optional = false
+python-versions = "*"
+version = "1.10.0"
 
 [package.source]
 reference = "geru"
@@ -1278,6 +1337,24 @@ optional = false
 python-versions = "*"
 version = "1.9.5"
 
+[package.dependencies]
+[package.dependencies."backports.functools-lru-cache"]
+python = "<3"
+version = "*"
+
+[package.source]
+reference = "geru"
+type = "legacy"
+url = "https://geru-pypi.geru.com.br/simple"
+
+[[package]]
+category = "dev"
+description = "A modern CSS selector implementation for Beautiful Soup."
+name = "soupsieve"
+optional = false
+python-versions = ">=3.5"
+version = "2.0"
+
 [package.source]
 reference = "geru"
 type = "legacy"
@@ -1301,30 +1378,8 @@ category = "dev"
 description = "tox is a generic virtualenv management and test command line tool"
 name = "tox"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "3.12.1"
-
-[package.dependencies]
-filelock = ">=3.0.0,<4"
-pluggy = ">=0.3.0,<1"
-py = ">=1.4.17,<2"
-setuptools = ">=30.0.0"
-six = ">=1.0.0,<2"
-toml = ">=0.9.4"
-virtualenv = ">=14.0.0"
-
-[package.source]
-reference = "geru"
-type = "legacy"
-url = "https://geru-pypi.geru.com.br/simple"
-
-[[package]]
-category = "dev"
-description = "tox is a generic virtualenv management and test command line tool"
-name = "tox"
-optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
-version = "3.14.4"
+version = "3.14.5"
 
 [package.dependencies]
 colorama = ">=0.4.1"
@@ -1351,7 +1406,7 @@ description = "Fast, Extensible Progress Meter"
 name = "tqdm"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*"
-version = "4.42.1"
+version = "4.43.0"
 
 [package.source]
 reference = "geru"
@@ -1459,7 +1514,7 @@ description = "Virtual Python Environment builder"
 name = "virtualenv"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
-version = "20.0.4"
+version = "20.0.8"
 
 [package.dependencies]
 appdirs = ">=1.4.3,<2"
@@ -1581,11 +1636,11 @@ url = "https://geru-pypi.geru.com.br/simple"
 [[package]]
 category = "dev"
 description = "Backport of pathlib-compatible object wrapper for zip files"
-marker = "python_version > \"3.4\" and python_version < \"3.8\" or python_version < \"3.8\""
+marker = "python_version >= \"2.7\" and python_version < \"3.0\" and (python_version >= \"2.7\" and python_version < \"3.0\" and (python_version > \"3.4\" and python_version < \"3.8\" or python_version < \"3.8\") or python_version > \"3.4\" and python_version < \"3.8\" or python_version < \"3.8\" or python_version > \"3.4\" and python_version < \"3.7\") or python_version >= \"2.7\" and python_version < \"3.0\" and (python_version > \"3.4\" and python_version < \"3.8\" or python_version < \"3.8\") or python_version > \"3.4\" and python_version < \"3.0\" and (python_version > \"3.4\" and python_version < \"3.8\" or python_version < \"3.8\") or python_version > \"3.4\" and python_version < \"3.8\" or python_version > \"3.4\" and python_version < \"3.7\" or python_version < \"3.8\""
 name = "zipp"
 optional = false
 python-versions = ">=2.7"
-version = "1.1.0"
+version = "1.2.0"
 
 [package.source]
 reference = "geru"
@@ -1627,7 +1682,7 @@ type = "legacy"
 url = "https://geru-pypi.geru.com.br/simple"
 
 [metadata]
-content-hash = "2f2b346126a1d0b71da37016f02e94db5671bf18b0aa3d5fd7b859e19be14c9a"
+content-hash = "c533816a1ca733bb0abbd52d17b6bc55caa8c57ac1ead567fb6164b1e8bbcff2"
 python-versions = "^2.7 || ^3.5 || ^3.6 || ^3.7"
 
 [metadata.hashes]
@@ -1637,12 +1692,14 @@ appnope = []
 atomicwrites = []
 attrs = []
 backcall = []
+"backports.functools-lru-cache" = []
 beautifulsoup4 = []
 bleach = []
 certifi = []
 chardet = []
 colorama = []
 configparser = []
+contextlib2 = []
 cookies = []
 cornice = []
 coverage = []
@@ -1695,6 +1752,7 @@ readme-renderer = []
 "repoze.lru" = []
 requests = []
 requests-toolbelt = []
+scandir = []
 simplejson = []
 six = []
 snowballstemmer = []

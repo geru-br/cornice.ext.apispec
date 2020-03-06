@@ -9,7 +9,7 @@ url = "https://geru-pypi.geru.com.br/simple"
 
 [tool.poetry]
 name = "cornice_apispec"
-version = "0.10.2"
+version = "0.11.0"
 description = "Cornice apispec extension"
 authors = ["Geru <dev@geru.com.br>"]
 readme = "README.md"
@@ -40,9 +40,12 @@ flake8 = [
 ]
 flake8-docstrings = "*"
 pytest = [
-    {version = "4.2.1", python = "^2.7"},
+    {version = "4.6.9", python = "^2.7"},
     {version = "*", python = ">3.4"}
 ]
+atomicwrites = "*"
+contextlib2 = "*"
+scandir = "*"
 pytest-cov = "*"
 more-itertools = [
     {version = "^5", python = "^2.7"},
@@ -53,10 +56,9 @@ twine = "*"
 ipdb = "*"
 
 pluggy = [
-    {version = "0.11.0", python = "^2.7"},
+    {version = "0.12.0", python = "^2.7"},
     {version = "*", python = ">3.4"}
 ]
-
 
 cookies = [{ version = "*", python = "~2.7" }]
 mock = [{ version = "*", python = "~2.7" }]

@@ -1,4 +1,11 @@
+from cornice_apispec.constants import DEFAULT_CONTENT_TYPE
 from cornice_apispec.utils import get_schema_name
+
+VALIDATOR_FOR_OPEN_API = {
+    'querystring': 'query',
+    'headers': 'header',
+    'path': 'path'
+}
 
 
 class AutoDoc(object):
@@ -13,7 +20,7 @@ class AutoDoc(object):
     * View short summary and long description
     """
 
-    def __init__(self, method, introspectable_view):
+    def __init__(self, method, introspectable_view, cornice_service):
         """Init class.
 
         Cornice saves his own @view decorator configurations
@@ -23,11 +30,12 @@ class AutoDoc(object):
 
         :param method: (str) request method
         :param introspectable_view: Pyramid Introspector View instance
+        :param cornice_service (Service): cornice service instance
         """
         self.method = method
         self.view = introspectable_view
-        self.view_operations = {}
-        self.cornice_config = getattr(introspectable_view['callable'], '__views__', [])
+        self.view_operations = {self.method.lower(): {}}
+        self.cornice_service = cornice_service
 
     @property
     def tags(self):
@@ -51,30 +59,30 @@ class AutoDoc(object):
 
     @property
     def validators(self):
-        return self.cornice_config[0].get('validators', [])
+        return self.cornice_service.get_validators(self.method)
 
     @property
     def content_type(self):
-        content_type_info = [
-            argument
-            for argument in self.cornice_config
-            if argument.get('content_type')
-        ]
-        if not content_type_info:
-            return "text/plain"
-        else:
-            return content_type_info[0]['content_type']
+        content_type_info = self.cornice_service.get_contenttypes(self.method)
+        return content_type_info[0] if content_type_info[0] else DEFAULT_CONTENT_TYPE
 
     def _find_request_schema(self):
-        schema_info = [
-            config
-            for config in self.cornice_config
-            if config.get('schema')
-        ]
-        return schema_info[0]['schema'] if schema_info else None
+        return self.cornice_service.filter_argumentlist(self.method, 'schema')[0]
+
+    def add_path_parameter(self, path_parameters):
+        parameter_list = []
+        for parameter_name in path_parameters:
+            parameter_list += [{
+                'name': parameter_name,
+                'in': 'path',
+                'required': True,
+                'schema': self.get_type_from_field('String'),
+                'description': "{} parameter".format(parameter_name)
+            }]
+        self._add_parameter(parameter_list)
 
     def find_schema_for(self, location):
-        if location not in ['body', 'headers', 'path', 'querystring']:
+        if location not in ['body', 'headers', 'querystring']:
             raise ValueError('Location not valid for find Schema')
         request_schema = self._find_request_schema()
         if not request_schema:
@@ -86,26 +94,29 @@ class AutoDoc(object):
             if validator.__dict__.get('location', '') == location:
                 return request_schema
 
+        # assumes the standard request scheme for http methods that contains data in the request body
+        contains_body_method = self.method.lower() in ('post', 'patch', 'put', 'delete')
+        is_location_body = location == 'body'
+        default_request_schema = request_schema if is_location_body and contains_body_method else None
+
         # No valid cornice validator was found
         # but request_schema exists. In this case,
         # return the nested match schema
         maybe_nested = request_schema._declared_fields.get(location, None)
-        return maybe_nested.nested if maybe_nested else None
+        return maybe_nested.nested if maybe_nested else default_request_schema
 
     def to_dict(self):
-        self.view_operations.setdefault(self.method.lower(), {"responses": {}})
-        if self.tags:
-            self.view_operations[self.method.lower()].update({'tags': self.tags})
-        if self.summary:
-            self.view_operations[self.method.lower()].update({'summary': self.summary})
-        if self.description:
-            self.view_operations[self.method.lower()].update({'description': self.description})
+        self._add_tags()
+        self._add_summary()
+        self._add_description()
+        self._generate_request_body()
+        self._generate_parameters()
+        self._generate_responses()
+        return self.view_operations
 
-        self.generate_request_body()
-        self.generate_parameters()
-
+    def _generate_responses(self):
         if self.response_schemas:
-            operations_dict = {}
+            responses_dict = {}
             for status_code in self.response_schemas:
                 schema = self.response_schemas[status_code]
                 schema_name = get_schema_name(schema)
@@ -121,25 +132,24 @@ class AutoDoc(object):
                         }
                     }
                 }
-                operations_dict.update(status_code_dict)
+                responses_dict.update(status_code_dict)
             # Update current method dict in Operation
-            self.view_operations[self.method.lower()].update({'responses': operations_dict})
-        return self.view_operations
+            self._add_responses(responses_dict)
 
-    def generate_parameters(self):
+    def _generate_parameters(self):
 
         def _observed_name(key):
             field = schema._declared_fields[key]
             return getattr(field, "load_from", None) or key
 
         parameter_list = []
-        for parameter_in in ['path', 'querystring', 'headers']:
+        for parameter_in in ['querystring', 'headers']:
             schema = self.find_schema_for(parameter_in)
             if schema:
                 parameter_list += [
                     {
                         'name': _observed_name(key),
-                        'in': parameter_in,
+                        'in': VALIDATOR_FOR_OPEN_API.get(parameter_in, parameter_in),
                         'required': schema._declared_fields[key].required,
                         'schema': self.get_type_from_field(schema._declared_fields[key]),
                         'description': schema.__doc__ or ""
@@ -147,21 +157,45 @@ class AutoDoc(object):
                     for key in schema._declared_fields
                 ]
         if parameter_list:
-            self.view_operations[self.method.lower()].update({'parameters': parameter_list})
+            self._add_parameter(parameter_list)
 
-    def generate_request_body(self):
+    def _generate_request_body(self):
         body_schema = self.find_schema_for('body')
         if body_schema:
             request_body_dict = {
                 'content': {
                     self.content_type: {
                         'schema': {
-                            '$ref': "#/components/schemas/{}".format(body_schema.__name__)
+                            '$ref': "#/components/schemas/{}".format(get_schema_name(body_schema))
                         }
                     }
                 }
             }
-            self.view_operations[self.method.lower()].update({'requestBody': request_body_dict})
+            self._add_request_body(request_body_dict)
+
+    def _add_request_body(self, request_body_dict):
+        self.view_operations[self.method.lower()].update({'requestBody': request_body_dict})
+
+    def _add_parameter(self, parameter_list):
+        found_parameter_list = self.view_operations[self.method.lower()].get('parameters', [])
+        for parameter in parameter_list:
+            found_parameter_list.append(parameter)
+        self.view_operations[self.method.lower()].update({'parameters': found_parameter_list})
+
+    def _add_responses(self, responses_dict):
+        self.view_operations[self.method.lower()].update({'responses': responses_dict})
+
+    def _add_tags(self):
+        if self.tags:
+            self.view_operations[self.method.lower()].update({'tags': self.tags})
+
+    def _add_summary(self):
+        if self.summary:
+            self.view_operations[self.method.lower()].update({'summary': self.summary})
+
+    def _add_description(self):
+        if self.description:
+            self.view_operations[self.method.lower()].update({'description': self.description})
 
     @staticmethod
     def get_type_from_field(field):
@@ -182,5 +216,3 @@ class AutoDoc(object):
             'Int': {"type": "integer"}
         }
         return convert_marshmallow_to_data_type.get(field_name, {"type": "string"})
-
-
