@@ -3,7 +3,6 @@ import hashlib
 
 
 def get_schema_name(schema):
-
     if inspect.isclass(schema):
         return schema.__name__
     else:
@@ -21,7 +20,9 @@ def get_schema_name(schema):
 
 def add_schema_in_spec(spec, schema):
     from apispec.exceptions import DuplicateComponentNameError
-    try:
-        spec.components.schema(get_schema_name(schema), schema=schema)
-    except DuplicateComponentNameError:
-        pass
+
+    if not isinstance(schema, str):
+        try:
+            spec.components.schema(get_schema_name(schema), schema=schema)
+        except DuplicateComponentNameError:
+            pass
